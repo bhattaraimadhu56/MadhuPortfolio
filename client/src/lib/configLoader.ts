@@ -63,7 +63,13 @@ export function setupAnalytics(settings: Settings): void {
  */
 export async function loadGlobalSettings(): Promise<Settings> {
   try {
-    const response = await fetch('/data/global_settings.json');
+   
+    // Before (Incorrect on sub-path)
+//const response = await fetch('/data/global_settings.json');
+
+// After (Correct)
+const response = await fetch(`${import.meta.env.BASE_URL}data/global_settings.json`);
+
     if (!response.ok) {
       throw new Error('Failed to load global settings');
     }
