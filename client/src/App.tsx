@@ -53,7 +53,7 @@ function App({ appData }: AppProps) {
         >
           <TooltipProvider>
             {/*  To show in github hosting with custom domain/... */} 
-            <Router base="/MadhuPortfolio">
+            <Router base={import.meta.env.BASE_URL}>
               <Toaster />
               <AppRoutes />
             </Router>
