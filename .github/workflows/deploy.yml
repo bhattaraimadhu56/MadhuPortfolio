@@ -35,6 +35,8 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
+        with:
+          version: 8 # <-- This line is re-added to satisfy the action
 
       - name: Get pnpm store directory
         shell: bash
