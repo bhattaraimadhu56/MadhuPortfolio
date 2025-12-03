@@ -1,0 +1,66 @@
+{
+  "metadata": {
+    "siteTitle": "Madhu Bhattarai - Data Analyst Portfolio",
+    "siteDescription": "Professional portfolio showcasing data analytics projects, visualizations, and insights. Specializing in business intelligence, predictive analytics, and data-driven decision making.",
+    "siteUrl": "https://www.madhudata.com",
+    "faviconPath": "/images/logo_rounded.png",
+    "appleTouchIconPath": "/images/logo_rounded.png"
+  },
+  "branding": {
+    "primaryColor": "#0066FF",
+    "secondaryColor": "#7C3AED",
+    "accentColor": "#00D9FF",
+    "backgroundColor": "#FFFFFF",
+    "textColor": "#1F2937",
+    "mutedTextColor": "#6B7280",
+    "borderColor": "#E5E7EB",
+    "fontFamily": "Inter, sans-serif",
+    "headingFontFamily": "Space Grotesk, sans-serif"
+  },
+  "header": {
+    "appName": "Madhu Portfolio",
+    "appLogo": "/images/logo_rounded.png",
+    "navigationLinks": [
+      { "label": "Home", "href": "/" },
+      { "label": "About", "href": "/about" },
+      { "label": "Portfolio", "href": "/portfolio" },
+      { "label": "Blog", "href": "/blog" },
+      { "label": "Contact", "href": "/contact" }
+    ],
+    "enableThemeToggle": true,
+    "enableMobileMenu": true
+  },
+  "profile": {
+    "fullName": "Madhu Bhattarai",
+    "title": "Data Analyst | Business Intelligence Specialist",
+    "location": "New Zealand",
+    "profileImage": "/images/profile.jpg",
+    "onlineStatus": true,
+    "statusColor": "#10B981"
+  },
+  "contact_info": {
+    "primaryEmail": "info@madhudata.com", 
+    "secondaryEmail": "madhu.datainsights@gmail.com",
+    "phone": "022 654 1537",
+    "githubUrl": "https://github.com/bhattaraimadhu",
+    "linkedinUrl": "https://www.linkedin.com/in/madhu-bhattarai-301923344/",
+    "resumeFileName": "/madhu_cv.pdf"
+  },
+  "socialLinks": [
+    {
+      "icon": "github",
+      "href": "https://github.com/bhattaraimadhu",
+      "label": "GitHub"
+    },
+    {
+      "icon": "linkedin",
+      "href": "https://www.linkedin.com/in/madhu-bhattarai-301923344/",
+      "label": "LinkedIn"
+    },
+    {
+      "icon": "mail",
+      "href": "mailto:madhu.datainsights@gmail.com",
+      "label": "Email"
+    }
+  ]
+}

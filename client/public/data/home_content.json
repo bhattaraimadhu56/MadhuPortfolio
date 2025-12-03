@@ -1,0 +1,63 @@
+{
+  "banner": {
+    "autoScrollInterval": 5000,
+    "showProfileOnBanner": true,
+    "profilePosition": "left",
+    "banners": [
+      {
+        "image": "/images/banners/banner_01.jpg",
+        "title": "Transforming Data into Actionable Insights"
+      },
+      {
+        "image": "/images/banners/banner_02.jpg",
+        "title": "Unlock the Power of Your Data"
+      },
+      {
+        "image": "/images/banners/banner_03.jpg",
+        "title": "Data-Driven Decisions for Business Growth"
+      },
+      {
+        "image": "/images/banners/banner_04.jpg",
+        "title": "From Raw Data to Strategic Intelligence"
+      },
+      {
+        "image": "/images/banners/banner_05.jpg",
+        "title": "Empowering Success Through Analytics"
+      }
+    ]
+  },
+  "heroTagline": "Welcome to My Portfolio",
+  "heroHeading": "Transforming Data into Actionable Insights",
+  "heroSubheading": "Data Analyst | Business Intelligence Specialist",
+  "skillsTitle": "Technical Skills",
+  "skillsSubtitle": "Proficient in a wide range of data analysis tools and technologies",
+  "skills": [
+    { "name": "Python", "icon": "🐍" },
+    { "name": "SQL", "icon": "🗄️" },
+    { "name": "Tableau", "icon": "📊" },
+    { "name": "Power BI", "icon": "📈" },
+    { "name": "Excel", "icon": "📑" },
+    { "name": "R", "icon": "📉" },
+    { "name": "Machine Learning", "icon": "🤖" },
+    { "name": "Statistics", "icon": "📐" }
+  ],
+  "achievementsTitle": "Key Achievements",
+  "achievementsSubtitle": "Delivering excellence in data analytics and business intelligence",
+  "achievements": [
+    {
+      "icon": "award",
+      "title": "Certified Data Analyst",
+      "description": "Professional certification in data analytics"
+    },
+    {
+      "icon": "users",
+      "title": "5+ Projects Delivered",
+      "description": "Successfully completed data analysis projects"
+    },
+    {
+      "icon": "target",
+      "title": "98% Client Satisfaction",
+      "description": "Consistently exceeding expectations"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "pageTitle": "Portfolio",
+  "pageSubtitle": "Showcase of my data analysis projects and visualizations",
+  "emptyMessage": "No projects yet. Check back soon!",
+  "filterLabel": "Filter by skill:",
+  "projects": [
+    {
+      "title": "Sales Performance Dashboard",
+      "description": "Interactive Power BI dashboard analyzing sales trends, customer segments, and revenue forecasts across multiple regions.",
+      "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=500&fit=crop",
+      "tags": ["Power BI", "SQL", "Data Visualization"],
+      "liveUrl": "https://example.com/sales-dashboard",
+      "githubUrl": "https://github.com/bhattaraimadhu56/sales-dashboard",
+      "category": "Business Intelligence"
+    },
+    {
+      "title": "Customer Churn Prediction",
+      "description": "Machine learning model predicting customer churn with 92% accuracy using Python, scikit-learn, and advanced feature engineering.",
+      "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=500&fit=crop",
+      "tags": ["Python", "Machine Learning", "Pandas"],
+      "liveUrl": "https://example.com/churn-prediction",
+      "githubUrl": "https://github.com/bhattaraimadhu56/customer-churn",
+      "category": "Predictive Analytics"
+    },
+    {
+      "title": "E-commerce Analytics Platform",
+      "description": "Comprehensive analytics solution tracking user behavior, conversion rates, and product performance using Google Analytics and Tableau.",
+      "image": "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&h=500&fit=crop",
+      "tags": ["Tableau", "Google Analytics", "SQL"],
+      "liveUrl": "https://example.com/ecommerce-analytics",
+      "githubUrl": "https://github.com/bhattaraimadhu56/ecommerce-analytics",
+      "category": "Web Analytics"
+    },
+    {
+      "title": "Financial Forecasting Model",
+      "description": "Time series analysis and forecasting model for quarterly revenue predictions with confidence intervals and scenario planning.",
+      "image": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&h=500&fit=crop",
+      "tags": ["R", "Statistics", "Forecasting"],
+      "liveUrl": "https://example.com/financial-forecasting",
+      "githubUrl": "https://github.com/bhattaraimadhu56/financial-forecasting",
+      "category": "Predictive Analytics"
+    },
+    {
+      "title": "Healthcare Data Insights",
+      "description": "Analysis of patient outcomes and treatment effectiveness using statistical methods and data visualization techniques.",
+      "image": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&h=500&fit=crop",
+      "tags": ["Python", "Statistics", "Healthcare"],
+      "liveUrl": "https://example.com/healthcare-insights",
+      "githubUrl": "https://github.com/bhattaraimadhu56/healthcare-insights",
+      "category": "Healthcare Analytics"
+    },
+    {
+      "title": "Social Media Sentiment Analysis",
+      "description": "NLP-based sentiment analysis of social media posts to gauge brand perception and customer satisfaction trends.",
+      "image": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&h=500&fit=crop",
+      "tags": ["Python", "NLP", "Data Mining"],
+      "liveUrl": "https://example.com/sentiment-analysis",
+      "githubUrl": "https://github.com/bhattaraimadhu56/sentiment-analysis",
+      "category": "Text Analytics"
+    }
+  ]
+}

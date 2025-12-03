@@ -1,0 +1,17 @@
+{
+  "description": "Data Analyst | BI Specialist",
+  "sections": [
+    {
+      "title": "Quick Links",
+      "links": [
+        { "label": "Home", "href": "/" },
+        { "label": "About", "href": "/about" },
+        { "label": "Portfolio", "href": "/portfolio" },
+        { "label": "Blog", "href": "/blog" },
+        { "label": "Contact", "href": "/contact" }
+      ]
+    }
+  ],
+  "copyright": "© 2025 Madhu Bhattarai. All rights reserved.",
+  "madeWith": ""
+}

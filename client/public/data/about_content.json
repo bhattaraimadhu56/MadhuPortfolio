@@ -1,0 +1,68 @@
+{
+  "pageTitle": "About Me",
+  "pageSubtitle": "Passionate data analyst with a proven track record of transforming complex datasets into actionable business insights",
+  "personalStory": {
+    "title": "My Story",
+    "content": "I'm a dedicated data analyst with a passion for uncovering insights from complex datasets. With over 5 years of experience in business intelligence and data visualization, I've helped numerous organizations make data-driven decisions that drive growth and efficiency.\n\nMy journey in data analytics began with a fascination for how data can tell stories and reveal hidden patterns. Since then, I've developed expertise in transforming raw data into actionable insights using industry-leading tools and methodologies.\n\nWhen I'm not analyzing data, you can find me exploring new data visualization techniques, contributing to open-source projects, or mentoring aspiring data analysts."
+  },
+  "workExperience": {
+    "title": "Work Experience",
+    "items": [
+      {
+        "position": "Data Analyst",
+        "company": "MVP Studio",
+        "duration": "2022 - Present",
+        "description": "Leading data analysis initiatives, creating dashboards, and providing strategic insights to drive business decisions. Responsible for designing and implementing analytics solutions that support executive-level decision making."
+      },
+      {
+        "position": "Data Analyst",
+        "company": "Previous Company",
+        "duration": "2020 - 2022",
+        "description": "Analyzed business data, created visualizations, and supported decision-making processes. Developed automated reporting solutions that reduced manual reporting time by 60%."
+      },
+      {
+        "position": "Junior Data Analyst",
+        "company": "First Company",
+        "duration": "2019 - 2020",
+        "description": "Assisted in data collection, cleaning, and basic analysis tasks. Learned foundational SQL and data visualization principles."
+      }
+    ]
+  },
+  "education": {
+    "title": "Education",
+    "items": [
+      {
+        "degree": "Graduate Diploma in Information Technology",
+        "school": "Auckland Institute of Studies",
+        "year": "2016",
+        "details": "Graduated with honors. Specialized in statistical analysis and machine learning."
+      },
+      {
+        "degree": "Data Analytics Certification",
+        "school": "Online Platform",
+        "year": "2020",
+        "details": "Advanced data analysis and visualization. Completed capstone project on predictive analytics."
+      }
+    ]
+  },
+  "certifications": {
+    "title": "Certifications",
+    "items": [
+      {
+        "name": "Certified Data Analyst",
+        "issuer": "Professional Organization",
+        "year": "2021"
+      },
+      {
+        "name": "Advanced SQL Certification",
+        "issuer": "Online Platform",
+        "year": "2022"
+      },
+      {
+        "name": "Tableau Desktop Specialist",
+        "issuer": "Tableau",
+        "year": "2023"
+      }
+    ]
+  }
+}

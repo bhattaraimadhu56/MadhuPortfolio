@@ -1,0 +1,41 @@
+{
+  "pageTitle": "Get in Touch",
+  "pageSubtitle": "I'd love to hear from you. Let's discuss how I can help with your data analysis needs.",
+  "contactForm": {
+    "title": "Send Me a Message",
+    "description": "Fill out the form below and I'll get back to you as soon as possible.",
+    "fields": [
+      {
+        "name": "name",
+        "label": "Full Name",
+        "type": "text",
+        "placeholder": "Your Name",
+        "required": true
+      },
+      {
+        "name": "email",
+        "label": "Email Address",
+        "type": "email",
+        "placeholder": "your.email@example.com",
+        "required": true
+      },
+      {
+        "name": "subject",
+        "label": "Subject",
+        "type": "text",
+        "placeholder": "What is this about?",
+        "required": true
+      },
+      {
+        "name": "message",
+        "label": "Message",
+        "type": "textarea",
+        "placeholder": "Tell me about your project or inquiry...",
+        "required": true
+      }
+    ],
+    "submitButton": "Send Message",
+    "successMessage": "Thank you for your message! I'll get back to you soon.",
+    "errorMessage": "There was an error sending your message. Please try again."
+  }
+}
