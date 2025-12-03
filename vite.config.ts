@@ -23,7 +23,7 @@ const plugins = [
 ];
 
 export default defineConfig({
-  base: '/',
+  base: ''/MadhuPortfolio/'',
   plugins,
   resolve: {
     alias: {
