@@ -55,7 +55,9 @@ jobs:
         run: pnpm install # <-- FIXED: Removed --frozen-lockfile
 
       - name: Build project
-        run: pnpm build
+        # Set VITE_CUSTOM_DOMAIN=true if the deployment is for the custom domain (www.madhudata.com)
+        # This forces the base path to '/' in vite.config.ts
+        run: VITE_CUSTOM_DOMAIN=true pnpm build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
