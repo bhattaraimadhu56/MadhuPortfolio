@@ -4,6 +4,7 @@ import { Link, useLocation } from "wouter";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useAppData } from "@/contexts/DataContext";
 import DynamicLink from "@/components/DynamicLink";
+import { resolveAssetPath } from "@/lib/pathUtils";
 
 interface NavLink {
   label: string;
@@ -18,7 +19,7 @@ export default function Header( ) {
   const { global } = useAppData();
   
   const siteTitle = global.metadata.siteTitle || "Portfolio";
-  const logo = global.header.appLogo || "/images/logo.png";
+  const logo = global.header.appLogo || resolveAssetPath("/images/logo.png");
   const navLinks: NavLink[] = global.header.navigationLinks || [
     { label: "Home", href: "/" },
     { label: "About", href: "/about" },

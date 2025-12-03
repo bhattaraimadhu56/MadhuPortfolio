@@ -1,6 +1,7 @@
 import { useAppData } from "@/contexts/DataContext";
 import DynamicButton from "@/components/DynamicButton";
 import { Download } from "lucide-react";
+import { resolveAssetPath } from "@/lib/pathUtils";
 
 /**
  * About Page
@@ -14,14 +15,14 @@ export default function About() {
   const profileConfig = global.profile || {};
   const contactInfo = global.contact_info || {};
 
-  const profileImage = profileConfig.profileImage || "/images/profile.jpg";
+  const profileImage = profileConfig.profileImage || resolveAssetPath("/images/profile.jpg");
   const fullName = profileConfig.fullName || "Name";
   const title = profileConfig.title || "Title";
   const personalStory = aboutConfig.personalStory || {};
   const workExperience = aboutConfig.workExperience || {};
   const education = aboutConfig.education || {};
   const certifications = aboutConfig.certifications || {};
-  const resumeUrl = contactInfo.resumeFileName || "/madhu_cv.pdf";
+  const resumeUrl = contactInfo.resumeFileName || resolveAssetPath("/madhu_cv.pdf");
 
   return (
     <div style={{ backgroundColor: "var(--color-bg)", color: "var(--color-text)", minHeight: "100vh" }}>

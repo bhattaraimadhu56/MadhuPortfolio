@@ -13,6 +13,8 @@
  * - /data/footer_content.json: Footer content
  */
 
+import { resolvePathsInObject, resolveAssetPath } from './pathUtils';
+
 interface Settings {
   metadata: {
     siteTitle: string;
@@ -73,7 +75,9 @@ const response = await fetch(`${import.meta.env.BASE_URL}data/global_settings.js
     if (!response.ok) {
       throw new Error('Failed to load global settings');
     }
-    return await response.json();
+    const data = await response.json();
+    // Resolve all asset paths in the settings
+    return resolvePathsInObject(data);
   } catch (error) {
     console.error('Error loading global settings:', error);
     return {} as Settings;
@@ -85,11 +89,13 @@ const response = await fetch(`${import.meta.env.BASE_URL}data/global_settings.js
  */
 export async function loadPageContent(pageName: string): Promise<any> {
   try {
-    const response = await fetch(`/data/${pageName}_content.json`);
+    const response = await fetch(`${import.meta.env.BASE_URL}data/${pageName}_content.json`);
     if (!response.ok) {
       throw new Error(`Failed to load ${pageName} content`);
     }
-    return await response.json();
+    const data = await response.json();
+    // Resolve all asset paths in the content
+    return resolvePathsInObject(data);
   } catch (error) {
     console.error(`Error loading ${pageName} content:`, error);
     return {};
@@ -137,7 +143,7 @@ export function applyMetadata(settings: Settings): void {
   if (metadata.faviconPath) {
     const faviconLink = document.querySelector('link[rel="icon"]') as HTMLLinkElement;
     if (faviconLink) {
-      faviconLink.href = metadata.faviconPath;
+      faviconLink.href = resolveAssetPath(metadata.faviconPath);
     }
   }
 
@@ -145,7 +151,7 @@ export function applyMetadata(settings: Settings): void {
   if (metadata.appleTouchIconPath) {
     const appleTouchLink = document.querySelector('link[rel="apple-touch-icon"]') as HTMLLinkElement;
     if (appleTouchLink) {
-      appleTouchLink.href = metadata.appleTouchIconPath;
+      appleTouchLink.href = resolveAssetPath(metadata.appleTouchIconPath);
     }
   }
 

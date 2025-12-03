@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
 import { useAppData } from "@/contexts/DataContext";
+import { resolveAssetPath } from "@/lib/pathUtils";
 
 interface BannerSliderProps {
   banners?: string[];
@@ -13,9 +14,9 @@ export default function BannerSlider({ banners = [] }: BannerSliderProps) {
   const profileConfig = global.profile || {};
   
   const defaultBanners = bannerConfig.banners || [
-    { image: "/images/banners/banner_01.jpg", title: "" },
-    { image: "/images/banners/banner_02.jpg", title: "" },
-    { image: "/images/banners/banner_03.jpg", title: "" },
+    { image: resolveAssetPath("/images/banners/banner_01.jpg"), title: "" },
+    { image: resolveAssetPath("/images/banners/banner_02.jpg"), title: "" },
+    { image: resolveAssetPath("/images/banners/banner_03.jpg"), title: "" },
   ];
 
   const displayBanners = banners.length > 0 
@@ -28,7 +29,7 @@ export default function BannerSlider({ banners = [] }: BannerSliderProps) {
   // Get auto-scroll interval from settings (default 5000ms)
   const autoScrollInterval = bannerConfig.autoScrollInterval || 5000;
   const showProfileOnBanner = bannerConfig.showProfileOnBanner !== false;
-  const profileImage = profileConfig.profileImage || "/images/profile.jpg";
+  const profileImage = profileConfig.profileImage || resolveAssetPath("/images/profile.jpg");
   const fullName = profileConfig.fullName || "Name";
   const title = profileConfig.title || "Title";
   const location = profileConfig.location || "Location";
