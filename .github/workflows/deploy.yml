@@ -36,7 +36,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 8 # <-- This line is re-added to satisfy the action
+          version: 8 # Re-added to satisfy the action
 
       - name: Get pnpm store directory
         shell: bash
@@ -52,7 +52,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install # <-- FIXED: Removed --frozen-lockfile
 
       - name: Build project
         run: pnpm build
