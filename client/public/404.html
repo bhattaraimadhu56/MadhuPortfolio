@@ -293,30 +293,35 @@
     </div>
 
     <script>
-      // GitHub Pages SPA routing fix
-      // This handles direct URL access by redirecting to index.html with the path as a query parameter
+      // GitHub Pages SPA routing fix - Prevents infinite reload loop
+      // This script redirects ONCE to the React app which handles routing
       (function() {
-        var redirect = sessionStorage.redirect;
-        delete sessionStorage.redirect;
-        if (redirect && redirect != location.href) {
-          // Only redirect if we have a stored redirect and it's not the current page
-          history.replaceState(null, null, redirect);
+        var pathSegmentsToKeep = 0;
+        var l = window.location;
+        
+        // Check if we've already attempted redirect (prevent infinite loop)
+        var redirectAttempted = sessionStorage.getItem('404_redirect_attempted');
+        
+        if (!redirectAttempted && l.pathname !== '/') {
+          // Mark that we're attempting a redirect
+          sessionStorage.setItem('404_redirect_attempted', 'true');
+          
+          // Replace the current URL with the root, preserving the path
+          // The React router will handle the actual routing
+          l.replace(
+            l.protocol + '//' + l.host + '/' +
+            (l.pathname ? '?p=' + l.pathname.replace(/&/g, '~and~').replace(/=/g, '~eq~') : '') +
+            (l.search ? '&q=' + l.search.slice(1).replace(/&/g, '~and~').replace(/=/g, '~eq~') : '') +
+            l.hash
+          );
+        } else {
+          // Clear the flag after showing 404 page
+          // This allows future navigation to work properly
+          setTimeout(function() {
+            sessionStorage.removeItem('404_redirect_attempted');
+          }, 1000);
         }
       })();
-
-      // Store the current path for SPA routing
-      var pathSegmentsToKeep = 0;
-      var location = window.location;
-      
-      if (location.pathname.slice(-1) === '/') {
-        location.pathname = location.pathname.slice(0, -1);
-      }
-      
-      var pathSegments = location.pathname.split('/').slice(1);
-      
-      if (pathSegments.length > pathSegmentsToKeep) {
-        sessionStorage.redirect = location.href;
-      }
     </script>
   </body>
 </html>

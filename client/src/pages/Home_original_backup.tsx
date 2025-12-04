@@ -13,20 +13,17 @@ export default function Home() {
   const achievements = homeConfig.achievements || [];
 
   return ( 
-    // Container with proper spacing to fit 100vh
-    <div style={{ backgroundColor: "var(--color-bg)", color: "var(--color-text)", width: "100%", minHeight: "100vh" }}> 
-      {/* Banner Slider Component with Profile - Now 35vh */}
+    // height of banner slider to cover full viewport height
+     
+      <div style={{ backgroundColor: "var(--color-bg)", color: "var(--color-text)",  width: "100%", minHeight: "100vh" }}> 
+      {/* Banner Slider Component with Profile */}
       <BannerSlider />
 
-      {/* Skills Section - Adjusted padding to fit within 100vh with banner */}
+      {/* Hero Section - Content moved to BannerSlider for full-height display */}
+
+      {/* Skills Section - Smaller boxes like portfolio filter */}
       {skills.length > 0 && (
-        <section 
-          style={{ 
-            padding: "clamp(80px, 12vw, 120px) 0 clamp(40px, 8vw, 80px) 0", // Extra top padding for profile card overlap
-            backgroundColor: "var(--color-bg)",
-            minHeight: "calc(65vh - 80px)", // Ensures it fits with banner in 100vh
-          }}
-        >
+        <section style={{ padding: "clamp(40px, 8vw, 80px) 0", backgroundColor: "var(--color-bg)" }}>
           <div className="container">
             <div style={{ padding: "0 var(--spacing-md)" }}>
               <div style={{ textAlign: "center", marginBottom: "clamp(32px, 6vw, 48px)" }}>

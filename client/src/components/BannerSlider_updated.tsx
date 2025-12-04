@@ -108,7 +108,7 @@ export default function BannerSlider({ banners = [] }: BannerSliderProps) {
                 <div
                   style={{
                     position: "absolute",
-                    top: "30%", // Adjusted from 50% to 30% to center in the reduced banner area
+                    top: "50%",
                     left: "50%",
                     transform: "translate(-50%, -50%)",
                     textAlign: "center",
@@ -251,14 +251,14 @@ export default function BannerSlider({ banners = [] }: BannerSliderProps) {
           </div>
         </div>
 
-        {/* LinkedIn-Style Profile Section - 70% in banner, 30% below banner */}
+        {/* LinkedIn-Style Profile Section - Bottom center of banner with glowing effects */}
         {showProfileOnBanner && (
           <div
             style={{
               position: "absolute",
-              bottom: "0",
+              bottom: "clamp(-60px, -10vw, -80px)", // Overlaps slightly below banner
               left: "50%",
-              transform: "translate(-50%, 30%)", // 30% extends below banner
+              transform: "translateX(-50%)",
               zIndex: 15,
               width: "clamp(300px, 80%, 600px)",
               padding: "0 var(--spacing-md)",

@@ -48,7 +48,7 @@ function App({ appData }: AppProps) {
     <ErrorBoundary>
       <DataProvider appData={appData}>
         <ThemeProvider
-          defaultTheme="light"
+          defaultTheme="dark"
           switchable
         >
           <TooltipProvider>
