@@ -24,7 +24,7 @@ export default function Home() {
           style={{ 
             padding: "clamp(80px, 12vw, 120px) 0 clamp(40px, 8vw, 80px) 0", // Extra top padding for profile card overlap
             backgroundColor: "var(--color-bg)",
-            minHeight: "calc(65vh - 80px)", // Ensures it fits with banner in 100vh
+            minHeight: "calc(50vh - 80px)", // Ensures it fits with 50vh banner in 100vh (50vh banner + 50vh skills)
           }}
         >
           <div className="container">

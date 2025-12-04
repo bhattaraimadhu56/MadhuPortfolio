@@ -66,11 +66,11 @@ export default function BannerSlider({ banners = [] }: BannerSliderProps) {
       <section
         style={{
           position: "relative",
-          overflow: "hidden",
+          // Removed overflow: hidden to prevent clipping of the profile card
           backgroundColor: "var(--color-bg-secondary)",
-          // Reduced height: 35vh for banner to fit everything in 100vh
-          height: "35vh",
-          minHeight: "250px",
+          // Increased height to 50vh as requested
+          height: "50vh",
+          minHeight: "300px",
         }}
       >
         {/* Banner Container */}
