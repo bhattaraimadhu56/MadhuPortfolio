@@ -114,7 +114,7 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
               id="siteDescription"
               value={data.metadata.siteDescription}
               onChange={(e) => updateField(['metadata', 'siteDescription'], e.target.value)}
-              rows={3}
+              rows={6}
             />
           </div>
 

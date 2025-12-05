@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { EditorWrapper } from './EditorWrapper';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Plus, Trash2 } from 'lucide-react';
@@ -72,10 +73,11 @@ export const FooterEditor: React.FC<FooterEditorProps> = ({ initialData }) => {
           
           <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
-            <Input
+            <Textarea
               id="description"
               value={data.description}
               onChange={(e) => updateField(['description'], e.target.value)}
+              rows={4}
             />
           </div>
         </div>

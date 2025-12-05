@@ -61,12 +61,12 @@ export const ContactEditor: React.FC<ContactEditorProps> = ({ initialData }) => 
               id="pageSubtitle"
               value={data.pageSubtitle}
               onChange={(e) => updateField(['pageSubtitle'], e.target.value)}
-              rows={2}
+              rows={5}
             />
           </div>
         </div>
 
-        {/* Contact Form Settings */}
+        {/* Contact Form Settings */
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Contact Form Settings</h3>
           
@@ -85,7 +85,7 @@ export const ContactEditor: React.FC<ContactEditorProps> = ({ initialData }) => 
               id="formDescription"
               value={data.contactForm.description}
               onChange={(e) => updateField(['contactForm', 'description'], e.target.value)}
-              rows={2}
+              rows={5}
             />
           </div>
 

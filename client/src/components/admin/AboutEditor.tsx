@@ -147,7 +147,7 @@ export const AboutEditor: React.FC<AboutEditorProps> = ({ initialData }) => {
             id="pageSubtitle"
             value={data.pageSubtitle}
             onChange={(e) => updateField(['pageSubtitle'], e.target.value)}
-            rows={2}
+            rows={4}
           />
         </div>
       </div>
@@ -173,7 +173,7 @@ export const AboutEditor: React.FC<AboutEditorProps> = ({ initialData }) => {
             id="storyContent"
             value={data.personalStory.content}
             onChange={(e) => updateField(['personalStory', 'content'], e.target.value)}
-            rows={8}
+            rows={12}
           />
         </div>
       </div>
@@ -249,7 +249,7 @@ export const AboutEditor: React.FC<AboutEditorProps> = ({ initialData }) => {
                       newItems[index].description = e.target.value;
                       updateField(['workExperience', 'items'], newItems);
                     }}
-                    rows={3}
+                    rows={6}
                   />
                 </div>
               </div>
