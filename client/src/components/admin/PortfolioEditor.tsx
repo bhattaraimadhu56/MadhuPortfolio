@@ -71,33 +71,35 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
   const saveProject = () => {
     if (!editingProject) return;
 
+    // Validate required fields
+    if (!editingProject.title || !editingProject.description || !editingProject.category) {
+      alert('Please fill in all required fields: Title, Description, and Category');
+      return;
+    }
+
     setData((prev: any) => {
       const newData = JSON.parse(JSON.stringify(prev));
+      // Ensure projects array exists
+      if (!Array.isArray(newData.projects)) {
+        newData.projects = [];
+      }
+
+      const projectData = {
+        title: editingProject.title,
+        description: editingProject.description,
+        image: editingProject.image,
+        tags: Array.isArray(editingProject.tags) ? editingProject.tags : [],
+        liveUrl: editingProject.liveUrl,
+        githubUrl: editingProject.githubUrl,
+        category: editingProject.category,
+      };
+
       if (editingProject._index !== undefined) {
         // Update existing project
-        newData.projects[editingProject._index] = {
-          title: editingProject.title,
-          description: editingProject.description,
-          image: editingProject.image,
-          tags: editingProject.tags,
-          liveUrl: editingProject.liveUrl,
-          githubUrl: editingProject.githubUrl,
-          category: editingProject.category,
-        };
+        newData.projects[editingProject._index] = projectData;
       } else {
-        // Add new project
-        newData.projects = [
-          {
-            title: editingProject.title,
-            description: editingProject.description,
-            image: editingProject.image,
-            tags: editingProject.tags,
-            liveUrl: editingProject.liveUrl,
-            githubUrl: editingProject.githubUrl,
-            category: editingProject.category,
-          },
-          ...newData.projects,
-        ];
+        // Add new project to the beginning
+        newData.projects.unshift(projectData);
       }
       return newData;
     });
@@ -300,7 +302,7 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
 
         {/* Edit/Add Project Dialog */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-[90%] w-full max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {editingProject?._index !== undefined ? 'Edit Project' : 'Add New Project'}
@@ -342,8 +344,8 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
                         value={editingProject.description}
                         onChange={(e) => updateEditingProject('description', e.target.value)}
                         placeholder="Detailed description of your project, technologies used, challenges overcome, and results achieved..."
-                        rows={8}
-                        className="resize-y"
+                        rows={12}
+                        className="w-full resize-y"
                       />
                       <p className="text-xs text-muted-foreground mt-1">
                         Provide a comprehensive description of your project (200-500 words recommended)

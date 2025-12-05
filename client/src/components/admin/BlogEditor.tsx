@@ -90,43 +90,40 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
   const savePost = () => {
     if (!editingPost) return;
 
+    // Validate required fields
+    if (!editingPost.title || !editingPost.slug || !editingPost.excerpt || !editingPost.content) {
+      alert('Please fill in all required fields: Title, Slug, Excerpt, and Content');
+      return;
+    }
+
     setData((prev: any) => {
       const newData = JSON.parse(JSON.stringify(prev));
+      // Ensure posts array exists
+      if (!Array.isArray(newData.posts)) {
+        newData.posts = [];
+      }
+
+      const postData = {
+        slug: editingPost.slug,
+        title: editingPost.title,
+        excerpt: editingPost.excerpt,
+        date: editingPost.date,
+        author: editingPost.author,
+        readTime: editingPost.readTime,
+        category: editingPost.category,
+        tags: Array.isArray(editingPost.tags) ? editingPost.tags : [],
+        image: editingPost.image,
+        content: editingPost.content,
+        status: editingPost.status || 'published',
+        seo: editingPost.seo || {},
+      };
+
       if (editingPost._index !== undefined) {
         // Update existing post
-        newData.posts[editingPost._index] = {
-          slug: editingPost.slug,
-          title: editingPost.title,
-          excerpt: editingPost.excerpt,
-          date: editingPost.date,
-          author: editingPost.author,
-          readTime: editingPost.readTime,
-          category: editingPost.category,
-          tags: editingPost.tags,
-          image: editingPost.image,
-          content: editingPost.content,
-          status: editingPost.status || 'published',
-          seo: editingPost.seo || {},
-        };
+        newData.posts[editingPost._index] = postData;
       } else {
-        // Add new post
-        newData.posts = [
-          {
-            slug: editingPost.slug,
-            title: editingPost.title,
-            excerpt: editingPost.excerpt,
-            date: editingPost.date,
-            author: editingPost.author,
-            readTime: editingPost.readTime,
-            category: editingPost.category,
-            tags: editingPost.tags,
-            image: editingPost.image,
-            content: editingPost.content,
-            status: editingPost.status || 'published',
-            seo: editingPost.seo || {},
-          },
-          ...newData.posts,
-        ];
+        // Add new post to the beginning
+        newData.posts.unshift(postData);
       }
       return newData;
     });
@@ -329,7 +326,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
 
       {/* Post Editor Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-[90%] w-full max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {editingPost?._index !== undefined ? 'Edit Blog Post' : 'Add New Blog Post'}
@@ -376,7 +373,8 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                       value={editingPost.excerpt}
                       onChange={(e) => updateEditingPost('excerpt', e.target.value)}
                       placeholder="Brief description of your blog post"
-                      rows={3}
+                      rows={6}
+                      className="w-full resize-y"
                     />
                   </div>
                 </div>
@@ -505,7 +503,8 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                       value={editingPost.seo?.metaDescription || ''}
                       onChange={(e) => updateEditingPostSEO('metaDescription', e.target.value)}
                       placeholder="Custom meta description for SEO"
-                      rows={2}
+                      rows={4}
+                      className="w-full resize-y"
                     />
                   </div>
                 </div>
