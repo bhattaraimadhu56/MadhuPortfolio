@@ -24,11 +24,11 @@ export const ContactEditor: React.FC<ContactEditorProps> = ({ initialData }) => 
     setData((prev: any) => {
       const newData = JSON.parse(JSON.stringify(prev));
       let current = newData;
-      
+
       for (let i = 0; i < path.length - 1; i++) {
         current = current[path[i]];
       }
-      
+
       current[path[path.length - 1]] = value;
       return newData;
     });
@@ -45,7 +45,7 @@ export const ContactEditor: React.FC<ContactEditorProps> = ({ initialData }) => 
         {/* Page Settings */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Page Settings</h3>
-          
+
           <div className="space-y-2">
             <Label htmlFor="pageTitle">Page Title</Label>
             <Input
@@ -66,10 +66,10 @@ export const ContactEditor: React.FC<ContactEditorProps> = ({ initialData }) => 
           </div>
         </div>
 
-        {/* Contact Form Settings */
+        {/* Contact Form Settings */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Contact Form Settings</h3>
-          
+
           <div className="space-y-2">
             <Label htmlFor="formTitle">Form Title</Label>
             <Input
@@ -119,7 +119,7 @@ export const ContactEditor: React.FC<ContactEditorProps> = ({ initialData }) => 
 
         <div className="p-4 bg-muted rounded-lg">
           <p className="text-sm text-muted-foreground">
-            <strong>Note:</strong> Form field configuration (name, email, subject, message) is managed in the code. 
+            <strong>Note:</strong> Form field configuration (name, email, subject, message) is managed in the code.
             This editor allows you to customize the labels and messages displayed to users.
           </p>
         </div>
@@ -127,5 +127,3 @@ export const ContactEditor: React.FC<ContactEditorProps> = ({ initialData }) => 
     </EditorWrapper>
   );
 };
-
-
