@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus, Trash2, Edit2, Save, X, Calendar, User, Clock } from 'lucide-react';
+import { Plus, Trash2, Edit2, Save, X, Calendar, User, Clock, Eye } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import MdEditor from 'react-markdown-editor-lite';
 import { marked } from 'marked';
@@ -34,6 +34,8 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
   const [hasChanges, setHasChanges] = useState(false);
   const [editingPost, setEditingPost] = useState<any>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [viewingPost, setViewingPost] = useState<any>(null);
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
 
   useEffect(() => {
     setHasChanges(JSON.stringify(data) !== JSON.stringify(initialData));
@@ -85,6 +87,11 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
   const editPost = (index: number) => {
     setEditingPost({ ...data.posts[index], _index: index });
     setIsDialogOpen(true);
+  };
+
+  const viewPost = (index: number) => {
+    setViewingPost(data.posts[index]);
+    setIsViewDialogOpen(true);
   };
 
   const savePost = () => {
@@ -195,105 +202,127 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
       hasChanges={hasChanges}
     >
       {/* Page Settings */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Page Settings</h3>
+      <div className="space-y-6 p-4 md:p-6 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+        <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+          <span className="w-1 h-6 bg-primary rounded-full"></span>
+          Page Settings
+        </h3>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div className="space-y-2">
-            <Label htmlFor="pageTitle">Page Title</Label>
+            <Label htmlFor="pageTitle" className="text-sm font-semibold text-slate-700 dark:text-slate-300">Page Title</Label>
             <Input
               id="pageTitle"
               value={data.pageTitle}
               onChange={(e) => updateField(['pageTitle'], e.target.value)}
+              className="w-full md:w-4/5 transition-all duration-200 focus:ring-2 focus:ring-primary"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="filterLabel">Filter Label</Label>
+            <Label htmlFor="filterLabel" className="text-sm font-semibold text-slate-700 dark:text-slate-300">Filter Label</Label>
             <Input
               id="filterLabel"
               value={data.filterLabel}
               onChange={(e) => updateField(['filterLabel'], e.target.value)}
+              className="w-full md:w-4/5 transition-all duration-200 focus:ring-2 focus:ring-primary"
             />
           </div>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="pageSubtitle">Page Subtitle</Label>
+          <Label htmlFor="pageSubtitle" className="text-sm font-semibold text-slate-700 dark:text-slate-300">Page Subtitle</Label>
           <Input
             id="pageSubtitle"
             value={data.pageSubtitle}
             onChange={(e) => updateField(['pageSubtitle'], e.target.value)}
+            className="w-full md:w-4/5 transition-all duration-200 focus:ring-2 focus:ring-primary"
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div className="space-y-2">
-            <Label htmlFor="emptyMessage">Empty State Message</Label>
+            <Label htmlFor="emptyMessage" className="text-sm font-semibold text-slate-700 dark:text-slate-300">Empty State Message</Label>
             <Input
               id="emptyMessage"
               value={data.emptyMessage}
               onChange={(e) => updateField(['emptyMessage'], e.target.value)}
+              className="w-full md:w-4/5 transition-all duration-200 focus:ring-2 focus:ring-primary"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="readMoreLabel">Read More Label</Label>
+            <Label htmlFor="readMoreLabel" className="text-sm font-semibold text-slate-700 dark:text-slate-300">Read More Label</Label>
             <Input
               id="readMoreLabel"
               value={data.readMoreLabel}
               onChange={(e) => updateField(['readMoreLabel'], e.target.value)}
+              className="w-full md:w-4/5 transition-all duration-200 focus:ring-2 focus:ring-primary"
             />
           </div>
         </div>
       </div>
 
-      <Separator className="my-6" />
+      <Separator className="my-8" />
 
       {/* Blog Posts */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold">Blog Posts ({data.posts.length})</h3>
-          <Button size="sm" onClick={addPost}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add Post
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg border border-primary/20">
+          <div>
+            <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100">Blog Posts</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+              {data.posts.length} {data.posts.length === 1 ? 'post' : 'posts'} total
+            </p>
+          </div>
+          <Button size="lg" onClick={addPost} className="w-full sm:w-auto shadow-md hover:shadow-lg transition-all duration-200">
+            <Plus className="h-5 w-5 mr-2" />
+            Add New Post
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:gap-6">
           {data.posts.map((post: any, index: number) => (
-            <Card key={index} className="p-4">
-              <div className="flex items-start gap-4">
+            <Card key={index} className="overflow-hidden hover:shadow-xl transition-all duration-300 border-2 border-slate-200 dark:border-slate-700 hover:border-primary/50">
+              <div className="flex flex-col md:flex-row items-start gap-4 p-4 md:p-6">
                 <img
                   src={post.image}
                   alt={post.title}
-                  className="w-32 h-20 object-cover rounded"
+                  className="w-full md:w-48 h-32 md:h-28 object-cover rounded-lg shadow-md"
                 />
                 
-                <div className="flex-1">
-                  <h4 className="font-semibold">{post.title}</h4>
-                  <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
+                <div className="flex-1 w-full">
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <h4 className="font-bold text-lg text-slate-800 dark:text-slate-100 line-clamp-2">{post.title}</h4>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${
+                      post.status === 'published' 
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100' 
+                        : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100'
+                    }`}>
+                      {post.status || 'published'}
+                    </span>
+                  </div>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 mb-3">
                     {post.excerpt}
                   </p>
-                  <div className="flex flex-wrap gap-3 mt-2 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="h-3 w-3" />
+                  <div className="flex flex-wrap gap-3 mb-3 text-xs text-slate-500 dark:text-slate-400">
+                    <span className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">
+                      <Calendar className="h-3.5 w-3.5" />
                       {post.date}
                     </span>
-                    <span className="flex items-center gap-1">
-                      <User className="h-3 w-3" />
+                    <span className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">
+                      <User className="h-3.5 w-3.5" />
                       {post.author}
                     </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-3 w-3" />
+                    <span className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">
+                      <Clock className="h-3.5 w-3.5" />
                       {post.readTime}
                     </span>
                   </div>
-                  <div className="flex flex-wrap gap-1 mt-2">
+                  <div className="flex flex-wrap gap-2">
                     {post.tags.map((tag: string, i: number) => (
                       <span
                         key={i}
-                        className="text-xs px-2 py-1 bg-primary/10 text-primary rounded"
+                        className="text-xs px-2.5 py-1 bg-primary/15 text-primary dark:bg-primary/25 dark:text-primary-foreground rounded-full font-medium"
                       >
                         {tag}
                       </span>
@@ -301,21 +330,33 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                   </div>
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex md:flex-col gap-2 w-full md:w-auto">
                   <Button
                     variant="outline"
-                    size="icon"
-                    onClick={() => editPost(index)}
+                    size="sm"
+                    onClick={() => viewPost(index)}
+                    className="flex-1 md:flex-none hover:bg-blue-50 dark:hover:bg-blue-900 hover:border-blue-300 transition-all duration-200"
                   >
-                    <Edit2 className="h-4 w-4" />
+                    <Eye className="h-4 w-4 mr-2" />
+                    View
                   </Button>
                   <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => removePost(index)}
-                    className="text-destructive"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => editPost(index)}
+                    className="flex-1 md:flex-none hover:bg-primary/10 hover:border-primary transition-all duration-200"
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Edit2 className="h-4 w-4 mr-2" />
+                    Edit
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => removePost(index)}
+                    className="flex-1 md:flex-none text-destructive hover:bg-destructive/10 hover:border-destructive transition-all duration-200"
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Delete
                   </Button>
                 </div>
               </div>
@@ -324,11 +365,84 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
         </div>
       </div>
 
+      {/* View Post Dialog */}
+      <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+        <DialogContent className="max-w-[95%] sm:max-w-[85%] md:max-w-[75%] lg:max-w-[65%] w-full max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">View Blog Post</DialogTitle>
+            <DialogDescription>
+              Preview of the blog post content
+            </DialogDescription>
+          </DialogHeader>
+
+          {viewingPost && (
+            <div className="space-y-6 py-4">
+              <div className="space-y-4">
+                <img
+                  src={viewingPost.image}
+                  alt={viewingPost.title}
+                  className="w-full h-64 object-cover rounded-lg shadow-lg"
+                />
+                <h2 className="text-3xl font-bold">{viewingPost.title}</h2>
+                <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
+                  <span className="flex items-center gap-1">
+                    <Calendar className="h-4 w-4" />
+                    {viewingPost.date}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <User className="h-4 w-4" />
+                    {viewingPost.author}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Clock className="h-4 w-4" />
+                    {viewingPost.readTime}
+                  </span>
+                </div>
+                <p className="text-lg text-muted-foreground">{viewingPost.excerpt}</p>
+                <div className="flex flex-wrap gap-2">
+                  {viewingPost.tags.map((tag: string, i: number) => (
+                    <span
+                      key={i}
+                      className="text-sm px-3 py-1 bg-primary/15 text-primary rounded-full"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <Separator />
+                <div 
+                  className="prose dark:prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{ __html: marked(viewingPost.content) }}
+                />
+              </div>
+              <div className="flex justify-end gap-2 pt-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsViewDialogOpen(false)}
+                >
+                  Close
+                </Button>
+                <Button
+                  onClick={() => {
+                    setIsViewDialogOpen(false);
+                    const index = data.posts.findIndex((p: any) => p.slug === viewingPost.slug);
+                    if (index !== -1) editPost(index);
+                  }}
+                >
+                  <Edit2 className="h-4 w-4 mr-2" />
+                  Edit Post
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
       {/* Post Editor Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-[90%] w-full max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[80%] w-full max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle className="text-2xl">
               {editingPost?._index !== undefined ? 'Edit Blog Post' : 'Add New Blog Post'}
             </DialogTitle>
             <DialogDescription>
@@ -337,23 +451,26 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
           </DialogHeader>
 
           {editingPost && (
-            <div className="space-y-6 py-4">
+            <div className="space-y-8 py-4">
               {/* Basic Information */}
-              <div className="space-y-4">
-                <h4 className="font-semibold text-lg">Basic Information</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="md:col-span-2">
-                    <Label htmlFor="edit-title">Title *</Label>
+              <div className="space-y-4 p-4 md:p-6 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700">
+                <h4 className="font-bold text-lg flex items-center gap-2">
+                  <span className="w-1 h-5 bg-primary rounded-full"></span>
+                  Basic Information
+                </h4>
+                <div className="grid grid-cols-1 gap-4">
+                  <div>
+                    <Label htmlFor="edit-title" className="text-sm font-semibold">Title *</Label>
                     <Input
                       id="edit-title"
                       value={editingPost.title}
                       onChange={(e) => updateEditingPost('title', e.target.value)}
                       placeholder="Blog Post Title"
-                      className="text-lg"
+                      className="text-lg mt-2 w-full md:w-4/5"
                     />
                   </div>
-                  <div className="md:col-span-2">
-                    <Label htmlFor="edit-slug">Slug (URL) *</Label>
+                  <div>
+                    <Label htmlFor="edit-slug" className="text-sm font-semibold">Slug (URL) *</Label>
                     <Input
                       id="edit-slug"
                       value={editingPost.slug}
@@ -361,20 +478,21 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                         updateEditingPost('slug', e.target.value.toLowerCase().replace(/\s+/g, '-'))
                       }
                       placeholder="blog-post-url"
+                      className="mt-2 w-full md:w-4/5"
                     />
                     <p className="text-xs text-muted-foreground mt-1">
                       URL: /blog/{editingPost.slug}
                     </p>
                   </div>
-                  <div className="md:col-span-2">
-                    <Label htmlFor="edit-excerpt">Excerpt *</Label>
+                  <div>
+                    <Label htmlFor="edit-excerpt" className="text-sm font-semibold">Excerpt *</Label>
                     <Textarea
                       id="edit-excerpt"
                       value={editingPost.excerpt}
                       onChange={(e) => updateEditingPost('excerpt', e.target.value)}
                       placeholder="Brief description of your blog post"
                       rows={6}
-                      className="w-full resize-y"
+                      className="w-full md:w-4/5 resize-y mt-2"
                     />
                   </div>
                 </div>
@@ -383,52 +501,59 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
               <Separator />
 
               {/* Metadata */}
-              <div className="space-y-4">
-                <h4 className="font-semibold text-lg">Metadata</h4>
+              <div className="space-y-4 p-4 md:p-6 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700">
+                <h4 className="font-bold text-lg flex items-center gap-2">
+                  <span className="w-1 h-5 bg-primary rounded-full"></span>
+                  Metadata
+                </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="edit-author">Author</Label>
+                    <Label htmlFor="edit-author" className="text-sm font-semibold">Author</Label>
                     <Input
                       id="edit-author"
                       value={editingPost.author}
                       onChange={(e) => updateEditingPost('author', e.target.value)}
                       placeholder="Author Name"
+                      className="mt-2 w-full md:w-4/5"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="edit-date">Date</Label>
+                    <Label htmlFor="edit-date" className="text-sm font-semibold">Date</Label>
                     <Input
                       id="edit-date"
                       type="date"
                       value={editingPost.date}
                       onChange={(e) => updateEditingPost('date', e.target.value)}
+                      className="mt-2 w-full md:w-4/5"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="edit-category">Category</Label>
+                    <Label htmlFor="edit-category" className="text-sm font-semibold">Category</Label>
                     <Input
                       id="edit-category"
                       value={editingPost.category}
                       onChange={(e) => updateEditingPost('category', e.target.value)}
                       placeholder="Category"
+                      className="mt-2 w-full md:w-4/5"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="edit-readTime">Read Time</Label>
+                    <Label htmlFor="edit-readTime" className="text-sm font-semibold">Read Time</Label>
                     <Input
                       id="edit-readTime"
                       value={editingPost.readTime}
                       onChange={(e) => updateEditingPost('readTime', e.target.value)}
                       placeholder="5 min read"
+                      className="mt-2 w-full md:w-4/5"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="edit-status">Status</Label>
+                    <Label htmlFor="edit-status" className="text-sm font-semibold">Status</Label>
                     <Select
                       value={editingPost.status || 'published'}
                       onValueChange={(value) => updateEditingPost('status', value)}
                     >
-                      <SelectTrigger id="edit-status">
+                      <SelectTrigger id="edit-status" className="mt-2 w-full md:w-4/5">
                         <SelectValue placeholder="Select status" />
                       </SelectTrigger>
                       <SelectContent>
@@ -438,12 +563,13 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                     </Select>
                   </div>
                   <div>
-                    <Label htmlFor="edit-image">Featured Image URL</Label>
+                    <Label htmlFor="edit-image" className="text-sm font-semibold">Featured Image URL</Label>
                     <Input
                       id="edit-image"
                       value={editingPost.image}
                       onChange={(e) => updateEditingPost('image', e.target.value)}
                       placeholder="https://example.com/image.jpg"
+                      className="mt-2 w-full md:w-4/5"
                     />
                   </div>
                 </div>
@@ -452,27 +578,32 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
               <Separator />
 
               {/* Tags */}
-              <div className="space-y-4">
+              <div className="space-y-4 p-4 md:p-6 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-semibold text-lg">Tags</h4>
+                  <h4 className="font-bold text-lg flex items-center gap-2">
+                    <span className="w-1 h-5 bg-primary rounded-full"></span>
+                    Tags
+                  </h4>
                   <Button type="button" variant="outline" size="sm" onClick={addTag}>
                     <Plus className="h-4 w-4 mr-2" />
                     Add Tag
                   </Button>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                   {editingPost.tags.map((tag: string, tagIndex: number) => (
                     <div key={tagIndex} className="flex gap-2">
                       <Input
                         value={tag}
                         onChange={(e) => updateTag(tagIndex, e.target.value)}
                         placeholder="tag-name"
+                        className="flex-1"
                       />
                       <Button
                         type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => removeTag(tagIndex)}
+                        className="text-destructive hover:bg-destructive/10"
                       >
                         <X className="h-4 w-4" />
                       </Button>
@@ -484,27 +615,31 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
               <Separator />
 
               {/* SEO Settings */}
-              <div className="space-y-4">
-                <h4 className="font-semibold text-lg">SEO Settings (Optional)</h4>
+              <div className="space-y-4 p-4 md:p-6 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700">
+                <h4 className="font-bold text-lg flex items-center gap-2">
+                  <span className="w-1 h-5 bg-primary rounded-full"></span>
+                  SEO Settings (Optional)
+                </h4>
                 <div className="grid grid-cols-1 gap-4">
                   <div>
-                    <Label htmlFor="edit-seo-title">Meta Title</Label>
+                    <Label htmlFor="edit-seo-title" className="text-sm font-semibold">Meta Title</Label>
                     <Input
                       id="edit-seo-title"
                       value={editingPost.seo?.metaTitle || ''}
                       onChange={(e) => updateEditingPostSEO('metaTitle', e.target.value)}
                       placeholder="Custom meta title for SEO"
+                      className="mt-2 w-full md:w-4/5"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="edit-seo-description">Meta Description</Label>
+                    <Label htmlFor="edit-seo-description" className="text-sm font-semibold">Meta Description</Label>
                     <Textarea
                       id="edit-seo-description"
                       value={editingPost.seo?.metaDescription || ''}
                       onChange={(e) => updateEditingPostSEO('metaDescription', e.target.value)}
                       placeholder="Custom meta description for SEO"
                       rows={4}
-                      className="w-full resize-y"
+                      className="w-full md:w-4/5 resize-y mt-2"
                     />
                   </div>
                 </div>
@@ -513,9 +648,12 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
               <Separator />
 
               {/* Content Editor */}
-              <div className="space-y-4">
-                <h4 className="font-semibold text-lg">Content (Markdown) *</h4>
-                <div className="border rounded-lg overflow-hidden">
+              <div className="space-y-4 p-4 md:p-6 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700">
+                <h4 className="font-bold text-lg flex items-center gap-2">
+                  <span className="w-1 h-5 bg-primary rounded-full"></span>
+                  Content (Markdown) *
+                </h4>
+                <div className="border rounded-lg overflow-hidden shadow-lg w-full md:w-4/5">
                   <MdEditor
                     value={editingPost.content}
                     style={{ height: '600px' }}
@@ -543,7 +681,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex justify-end gap-2 pt-4">
+              <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t">
                 <Button
                   type="button"
                   variant="outline"
@@ -551,10 +689,15 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                     setEditingPost(null);
                     setIsDialogOpen(false);
                   }}
+                  className="w-full sm:w-auto"
                 >
                   Cancel
                 </Button>
-                <Button type="button" onClick={savePost} className="gap-2">
+                <Button 
+                  type="button" 
+                  onClick={savePost} 
+                  className="w-full sm:w-auto gap-2 shadow-md hover:shadow-lg transition-all duration-200"
+                >
                   <Save className="h-4 w-4" />
                   Save Post
                 </Button>
