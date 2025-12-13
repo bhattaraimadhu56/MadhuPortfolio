@@ -7,7 +7,7 @@ import { useAdminMode, AdminModeState } from '@/hooks/useAdminMode';
  */
 
 interface AdminContextType extends AdminModeState {
-  authenticate: (password: string) => boolean;
+  authenticate: (password: string) => Promise<boolean>;
   closePasswordPrompt: () => void;
   logout: () => void;
 }

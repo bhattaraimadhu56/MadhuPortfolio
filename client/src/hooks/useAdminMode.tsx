@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import bcrypt from 'bcryptjs';
 
 /**
  * Admin Mode Hook
@@ -6,11 +7,15 @@ import { useState, useEffect, useCallback } from 'react';
  * 
  * Features:
  * - Secret key combination (Ctrl+Shift+E) to toggle admin mode
- * - Password protection
+ * - Password protection with bcrypt hashing
  * - Persistent state across page reloads (sessionStorage)
+ * - Secure password verification using bcrypt
  */
 
-const ADMIN_PASSWORD = 'madhuadmin2025';
+// Get hashed password from environment variable
+const ADMIN_PASSWORD_HASH = import.meta.env.VITE_ADMIN_PASSWORD_HASH || 
+  '$2b$10$cqnpofa26gRAGU1sc5APJuLUNv6SkOY.Yke6YYLkaFbsi9ZiWZC2i';
+
 const SECRET_KEY_COMBO = { ctrl: true, shift: true, key: 'e' };
 
 export interface AdminModeState {
@@ -67,18 +72,26 @@ export const useAdminMode = () => {
     };
   }, [handleKeyDown]);
 
-  // Authenticate with password
-  const authenticate = useCallback((password: string): boolean => {
-    if (password === ADMIN_PASSWORD) {
-      setAdminState({
-        isAdminMode: true,
-        isAuthenticated: true,
-        showPasswordPrompt: false,
-      });
-      sessionStorage.setItem('adminAuthenticated', 'true');
-      return true;
+  // Authenticate with password using bcrypt
+  const authenticate = useCallback(async (password: string): Promise<boolean> => {
+    try {
+      // Compare password with bcrypt hash
+      const isMatch = await bcrypt.compare(password, ADMIN_PASSWORD_HASH);
+      
+      if (isMatch) {
+        setAdminState({
+          isAdminMode: true,
+          isAuthenticated: true,
+          showPasswordPrompt: false,
+        });
+        sessionStorage.setItem('adminAuthenticated', 'true');
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Authentication error:', error);
+      return false;
     }
-    return false;
   }, []);
 
   // Close password prompt

@@ -21,18 +21,27 @@ export const AdminPasswordDialog: React.FC = () => {
   const { showPasswordPrompt, authenticate, closePasswordPrompt } = useAdmin();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     
-    const success = authenticate(password);
-    
-    if (success) {
+    try {
+      const success = await authenticate(password);
+      
+      if (success) {
+        setPassword('');
+        setError('');
+      } else {
+        setError('Incorrect password. Please try again.');
+        setPassword('');
+      }
+    } catch (err) {
+      setError('Authentication error. Please try again.');
       setPassword('');
-      setError('');
-    } else {
-      setError('Incorrect password. Please try again.');
-      setPassword('');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -79,8 +88,8 @@ export const AdminPasswordDialog: React.FC = () => {
             <Button type="button" variant="outline" onClick={handleClose}>
               Cancel
             </Button>
-            <Button type="submit">
-              Authenticate
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? 'Verifying...' : 'Authenticate'}
             </Button>
           </div>
         </form>
