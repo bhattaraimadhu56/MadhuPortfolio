@@ -45,6 +45,8 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
     setData(initialData);
     setEditingPost(null);
     setIsDialogOpen(false);
+    setViewingPost(null);
+    setIsViewDialogOpen(false);
   };
 
   const updateField = (path: string[], value: any) => {
@@ -194,6 +196,16 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
     }
   };
 
+  const closeEditDialog = () => {
+    setEditingPost(null);
+    setIsDialogOpen(false);
+  };
+
+  const closeViewDialog = () => {
+    setViewingPost(null);
+    setIsViewDialogOpen(false);
+  };
+
   return (
     <EditorWrapper
       fileName="blog_content.json"
@@ -336,6 +348,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
 
                 <div className="flex md:flex-col gap-2 w-full md:w-auto">
                   <Button
+                    type="button"
                     variant="outline"
                     size="sm"
                     onClick={() => viewPost(index)}
@@ -345,6 +358,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                     View
                   </Button>
                   <Button
+                    type="button"
                     variant="outline"
                     size="sm"
                     onClick={() => editPost(index)}
@@ -354,6 +368,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                     Edit
                   </Button>
                   <Button
+                    type="button"
                     variant="outline"
                     size="sm"
                     onClick={() => removePost(index)}
@@ -369,17 +384,17 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
         </div>
       </div>
 
-      {/* View Post Dialog */}
-      {isViewDialogOpen && viewingPost && (
-        <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-          <DialogContent className="max-w-[95%] sm:max-w-[85%] md:max-w-[75%] lg:max-w-[65%] w-full max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle className="text-2xl">View Blog Post</DialogTitle>
-              <DialogDescription>
-                Preview of the blog post content
-              </DialogDescription>
-            </DialogHeader>
+      {/* View Post Dialog - Always in DOM */}
+      <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+        <DialogContent className="max-w-[95%] sm:max-w-[85%] md:max-w-[75%] lg:max-w-[65%] w-full max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">View Blog Post</DialogTitle>
+            <DialogDescription>
+              Preview of the blog post content
+            </DialogDescription>
+          </DialogHeader>
 
+          {viewingPost && (
             <div className="space-y-6 py-4">
               <div className="space-y-4">
                 <img
@@ -419,18 +434,24 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                   dangerouslySetInnerHTML={{ __html: marked(viewingPost.content) }}
                 />
               </div>
-              <div className="flex justify-end gap-2 pt-4">
+              <div className="flex justify-end gap-2 pt-4 border-t">
                 <Button
+                  type="button"
                   variant="outline"
-                  onClick={() => setIsViewDialogOpen(false)}
+                  onClick={() => {
+                    closeViewDialog();
+                  }}
                 >
                   Close
                 </Button>
                 <Button
+                  type="button"
                   onClick={() => {
-                    setIsViewDialogOpen(false);
                     const index = data.posts.findIndex((p: any) => p.slug === viewingPost.slug);
-                    if (index !== -1) editPost(index);
+                    closeViewDialog();
+                    if (index !== -1) {
+                      setTimeout(() => editPost(index), 100);
+                    }
                   }}
                 >
                   <Edit2 className="h-4 w-4 mr-2" />
@@ -438,23 +459,23 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                 </Button>
               </div>
             </div>
-          </DialogContent>
-        </Dialog>
-      )}
+          )}
+        </DialogContent>
+      </Dialog>
 
-      {/* Post Editor Dialog */}
-      {isDialogOpen && editingPost && (
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[80%] w-full max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle className="text-2xl">
-                {editingPost?._index !== undefined ? 'Edit Blog Post' : 'Add New Blog Post'}
-              </DialogTitle>
-              <DialogDescription>
-                Fill in the details below. Use markdown for rich content formatting.
-              </DialogDescription>
-            </DialogHeader>
+      {/* Post Editor Dialog - Always in DOM */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[80%] w-full max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">
+              {editingPost?._index !== undefined ? 'Edit Blog Post' : 'Add New Blog Post'}
+            </DialogTitle>
+            <DialogDescription>
+              Fill in the details below. Use markdown for rich content formatting.
+            </DialogDescription>
+          </DialogHeader>
 
+          {editingPost && (
             <div className="space-y-8 py-4">
               {/* Basic Information */}
               <div className="space-y-4 p-4 md:p-6 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700">
@@ -467,6 +488,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                     <Label htmlFor="edit-title" className="text-sm font-semibold">Title *</Label>
                     <Input
                       id="edit-title"
+                      type="text"
                       value={editingPost.title}
                       onChange={(e) => updateEditingPost('title', e.target.value)}
                       placeholder="Blog Post Title"
@@ -477,6 +499,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                     <Label htmlFor="edit-slug" className="text-sm font-semibold">Slug (URL) *</Label>
                     <Input
                       id="edit-slug"
+                      type="text"
                       value={editingPost.slug}
                       onChange={(e) =>
                         updateEditingPost('slug', e.target.value.toLowerCase().replace(/\s+/g, '-'))
@@ -515,6 +538,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                     <Label htmlFor="edit-author" className="text-sm font-semibold">Author</Label>
                     <Input
                       id="edit-author"
+                      type="text"
                       value={editingPost.author}
                       onChange={(e) => updateEditingPost('author', e.target.value)}
                       placeholder="Author Name"
@@ -535,6 +559,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                     <Label htmlFor="edit-category" className="text-sm font-semibold">Category</Label>
                     <Input
                       id="edit-category"
+                      type="text"
                       value={editingPost.category}
                       onChange={(e) => updateEditingPost('category', e.target.value)}
                       placeholder="Category"
@@ -545,6 +570,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                     <Label htmlFor="edit-readTime" className="text-sm font-semibold">Read Time</Label>
                     <Input
                       id="edit-readTime"
+                      type="text"
                       value={editingPost.readTime}
                       onChange={(e) => updateEditingPost('readTime', e.target.value)}
                       placeholder="5 min read"
@@ -570,6 +596,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                     <Label htmlFor="edit-image" className="text-sm font-semibold">Featured Image URL</Label>
                     <Input
                       id="edit-image"
+                      type="text"
                       value={editingPost.image}
                       onChange={(e) => updateEditingPost('image', e.target.value)}
                       placeholder="https://example.com/image.jpg"
@@ -597,6 +624,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                   {editingPost.tags.map((tag: string, tagIndex: number) => (
                     <div key={tagIndex} className="flex gap-2">
                       <Input
+                        type="text"
                         value={tag}
                         onChange={(e) => updateTag(tagIndex, e.target.value)}
                         placeholder="tag-name"
@@ -629,6 +657,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                     <Label htmlFor="edit-seo-title" className="text-sm font-semibold">Meta Title</Label>
                     <Input
                       id="edit-seo-title"
+                      type="text"
                       value={editingPost.seo?.metaTitle || ''}
                       onChange={(e) => updateEditingPostSEO('metaTitle', e.target.value)}
                       placeholder="Custom meta title for SEO"
@@ -690,8 +719,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                   type="button"
                   variant="outline"
                   onClick={() => {
-                    setEditingPost(null);
-                    setIsDialogOpen(false);
+                    closeEditDialog();
                   }}
                   className="w-full sm:w-auto"
                 >
@@ -707,9 +735,9 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                 </Button>
               </div>
             </div>
-          </DialogContent>
-        </Dialog>
-      )}
+          )}
+        </DialogContent>
+      </Dialog>
     </EditorWrapper>
   );
 };
