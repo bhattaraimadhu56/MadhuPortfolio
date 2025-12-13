@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Plus, Trash2, Edit2, Eye, Save, X } from 'lucide-react';
+import { Plus, Trash2, Edit2, Eye, Save, X, Upload } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import MdEditor from 'react-markdown-editor-lite';
 import { marked } from 'marked';
@@ -54,6 +54,16 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
       current[path[path.length - 1]] = value;
       return newData;
     });
+  };
+
+  // Convert file to base64
+  const handleImageUpload = (file: File, callback: (base64: string) => void) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const base64 = e.target?.result as string;
+      callback(base64);
+    };
+    reader.readAsDataURL(file);
   };
 
   // Add new post
@@ -174,55 +184,55 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
         </h3>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          <div className="space-y-2">
+          <div className="space-y-2 w-full md:w-4/5">
             <Label htmlFor="pageTitle" className="text-sm font-semibold">Page Title</Label>
             <Input
               id="pageTitle"
               value={data.pageTitle}
               onChange={(e) => updateField(['pageTitle'], e.target.value)}
-              className="w-full md:w-4/5"
+              className="w-full"
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 w-full md:w-4/5">
             <Label htmlFor="filterLabel" className="text-sm font-semibold">Filter Label</Label>
             <Input
               id="filterLabel"
               value={data.filterLabel}
               onChange={(e) => updateField(['filterLabel'], e.target.value)}
-              className="w-full md:w-4/5"
+              className="w-full"
             />
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2 w-full md:w-4/5">
           <Label htmlFor="pageSubtitle" className="text-sm font-semibold">Page Subtitle</Label>
           <Input
             id="pageSubtitle"
             value={data.pageSubtitle}
             onChange={(e) => updateField(['pageSubtitle'], e.target.value)}
-            className="w-full md:w-4/5"
+            className="w-full"
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          <div className="space-y-2">
+          <div className="space-y-2 w-full md:w-4/5">
             <Label htmlFor="emptyMessage" className="text-sm font-semibold">Empty State Message</Label>
             <Input
               id="emptyMessage"
               value={data.emptyMessage}
               onChange={(e) => updateField(['emptyMessage'], e.target.value)}
-              className="w-full md:w-4/5"
+              className="w-full"
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 w-full md:w-4/5">
             <Label htmlFor="readMoreLabel" className="text-sm font-semibold">Read More Label</Label>
             <Input
               id="readMoreLabel"
               value={data.readMoreLabel}
               onChange={(e) => updateField(['readMoreLabel'], e.target.value)}
-              className="w-full md:w-4/5"
+              className="w-full"
             />
           </div>
         </div>
@@ -262,38 +272,71 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
               <div className="space-y-4">
                 <h5 className="font-semibold text-slate-700 dark:text-slate-300">Basic Information</h5>
                 
-                <div className="space-y-2">
+                <div className="space-y-2 w-full lg:w-4/5">
                   <Label className="text-sm font-semibold">Title *</Label>
                   <Input
                     type="text"
                     value={newPost.title}
                     onChange={(e) => updateNewPostField('title', e.target.value)}
                     placeholder="Blog Post Title"
-                    className="w-full md:w-4/5"
+                    className="w-full"
                   />
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2 w-full lg:w-4/5">
                   <Label className="text-sm font-semibold">Slug (URL) *</Label>
                   <Input
                     type="text"
                     value={newPost.slug}
                     onChange={(e) => updateNewPostField('slug', e.target.value.toLowerCase().replace(/\s+/g, '-'))}
                     placeholder="blog-post-url"
-                    className="w-full md:w-4/5"
+                    className="w-full"
                   />
                   <p className="text-xs text-muted-foreground">URL: /blog/{newPost.slug}</p>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2 w-full lg:w-4/5">
                   <Label className="text-sm font-semibold">Excerpt *</Label>
                   <Textarea
                     value={newPost.excerpt}
                     onChange={(e) => updateNewPostField('excerpt', e.target.value)}
                     placeholder="Brief description of your blog post"
-                    rows={4}
-                    className="w-full md:w-4/5"
+                    rows={2}
+                    className="w-full resize-y min-h-[60px]"
                   />
+                </div>
+              </div>
+
+              {/* Image Upload */}
+              <div className="space-y-4">
+                <h5 className="font-semibold text-slate-700 dark:text-slate-300">Featured Image</h5>
+                
+                <div className="space-y-2 w-full lg:w-4/5">
+                  <Label className="text-sm font-semibold">Upload Image from Computer</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          handleImageUpload(file, (base64) => {
+                            updateNewPostField('image', base64);
+                          });
+                        }
+                      }}
+                      className="w-full"
+                    />
+                  </div>
+                  {newPost.image && (
+                    <div className="mt-4">
+                      <img
+                        src={newPost.image}
+                        alt="Preview"
+                        className="max-w-full h-auto max-h-64 rounded-lg shadow-md"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -301,7 +344,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
               <div className="space-y-4">
                 <h5 className="font-semibold text-slate-700 dark:text-slate-300">Metadata</h5>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full lg:w-4/5">
                   <div className="space-y-2">
                     <Label className="text-sm font-semibold">Author</Label>
                     <Input
@@ -357,24 +400,13 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                       </SelectContent>
                     </Select>
                   </div>
-
-                  <div className="space-y-2">
-                    <Label className="text-sm font-semibold">Featured Image URL</Label>
-                    <Input
-                      type="text"
-                      value={newPost.image}
-                      onChange={(e) => updateNewPostField('image', e.target.value)}
-                      placeholder="https://example.com/image.jpg"
-                      className="w-full"
-                    />
-                  </div>
                 </div>
               </div>
 
               {/* Content */}
               <div className="space-y-4">
                 <h5 className="font-semibold text-slate-700 dark:text-slate-300">Content (Markdown) *</h5>
-                <div className="border rounded-lg overflow-hidden shadow-lg w-full md:w-4/5">
+                <div className="border rounded-lg overflow-hidden shadow-lg w-full lg:w-4/5">
                   <MdEditor
                     value={newPost.content}
                     style={{ height: '400px' }}
@@ -389,7 +421,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t">
+              <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t w-full lg:w-4/5">
                 <Button
                   type="button"
                   variant="outline"
@@ -501,11 +533,13 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
               </div>
 
               <div className="space-y-4 mb-6">
-                <img
-                  src={data.posts[viewingIndex].image}
-                  alt={data.posts[viewingIndex].title}
-                  className="w-full h-64 object-cover rounded-lg"
-                />
+                {data.posts[viewingIndex].image && (
+                  <img
+                    src={data.posts[viewingIndex].image}
+                    alt={data.posts[viewingIndex].title}
+                    className="w-full h-64 object-cover rounded-lg"
+                  />
+                )}
                 <p className="text-muted-foreground">{data.posts[viewingIndex].excerpt}</p>
                 <div className="flex flex-wrap gap-2">
                   {data.posts[viewingIndex].tags?.map((tag: string, i: number) => (
@@ -557,38 +591,71 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
             <div className="space-y-4">
               <h5 className="font-semibold text-slate-700 dark:text-slate-300">Basic Information</h5>
               
-              <div className="space-y-2">
+              <div className="space-y-2 w-full lg:w-4/5">
                 <Label className="text-sm font-semibold">Title *</Label>
                 <Input
                   type="text"
                   value={data.posts[editingIndex].title}
                   onChange={(e) => updatePostField(editingIndex, 'title', e.target.value)}
                   placeholder="Blog Post Title"
-                  className="w-full md:w-4/5"
+                  className="w-full"
                 />
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 w-full lg:w-4/5">
                 <Label className="text-sm font-semibold">Slug (URL) *</Label>
                 <Input
                   type="text"
                   value={data.posts[editingIndex].slug}
                   onChange={(e) => updatePostField(editingIndex, 'slug', e.target.value.toLowerCase().replace(/\s+/g, '-'))}
                   placeholder="blog-post-url"
-                  className="w-full md:w-4/5"
+                  className="w-full"
                 />
                 <p className="text-xs text-muted-foreground">URL: /blog/{data.posts[editingIndex].slug}</p>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 w-full lg:w-4/5">
                 <Label className="text-sm font-semibold">Excerpt *</Label>
                 <Textarea
                   value={data.posts[editingIndex].excerpt}
                   onChange={(e) => updatePostField(editingIndex, 'excerpt', e.target.value)}
                   placeholder="Brief description of your blog post"
-                  rows={4}
-                  className="w-full md:w-4/5"
+                  rows={2}
+                  className="w-full resize-y min-h-[60px]"
                 />
+              </div>
+            </div>
+
+            {/* Image Upload */}
+            <div className="space-y-4">
+              <h5 className="font-semibold text-slate-700 dark:text-slate-300">Featured Image</h5>
+              
+              <div className="space-y-2 w-full lg:w-4/5">
+                <Label className="text-sm font-semibold">Upload Image from Computer</Label>
+                <div className="flex gap-2">
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        handleImageUpload(file, (base64) => {
+                          updatePostField(editingIndex, 'image', base64);
+                        });
+                      }
+                    }}
+                    className="w-full"
+                  />
+                </div>
+                {data.posts[editingIndex].image && (
+                  <div className="mt-4">
+                    <img
+                      src={data.posts[editingIndex].image}
+                      alt="Preview"
+                      className="max-w-full h-auto max-h-64 rounded-lg shadow-md"
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
@@ -596,7 +663,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
             <div className="space-y-4">
               <h5 className="font-semibold text-slate-700 dark:text-slate-300">Metadata</h5>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full lg:w-4/5">
                 <div className="space-y-2">
                   <Label className="text-sm font-semibold">Author</Label>
                   <Input
@@ -655,24 +722,13 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                     </SelectContent>
                   </Select>
                 </div>
-
-                <div className="space-y-2">
-                  <Label className="text-sm font-semibold">Featured Image URL</Label>
-                  <Input
-                    type="text"
-                    value={data.posts[editingIndex].image}
-                    onChange={(e) => updatePostField(editingIndex, 'image', e.target.value)}
-                    placeholder="https://example.com/image.jpg"
-                    className="w-full"
-                  />
-                </div>
               </div>
             </div>
 
             {/* Content */}
             <div className="space-y-4">
               <h5 className="font-semibold text-slate-700 dark:text-slate-300">Content (Markdown) *</h5>
-              <div className="border rounded-lg overflow-hidden shadow-lg w-full md:w-4/5">
+              <div className="border rounded-lg overflow-hidden shadow-lg w-full lg:w-4/5">
                 <MdEditor
                   value={data.posts[editingIndex].content}
                   style={{ height: '400px' }}
@@ -687,7 +743,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t">
+            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t w-full lg:w-4/5">
               <Button
                 type="button"
                 variant="outline"
