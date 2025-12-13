@@ -274,7 +274,11 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
               {data.posts.length} {data.posts.length === 1 ? 'post' : 'posts'} total
             </p>
           </div>
-          <Button size="lg" onClick={addPost} className="w-full sm:w-auto shadow-md hover:shadow-lg transition-all duration-200">
+          <Button 
+            size="lg" 
+            onClick={addPost} 
+            className="w-full sm:w-auto shadow-md hover:shadow-lg transition-all duration-200"
+          >
             <Plus className="h-5 w-5 mr-2" />
             Add New Post
           </Button>
@@ -366,16 +370,16 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
       </div>
 
       {/* View Post Dialog */}
-      <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-        <DialogContent className="max-w-[95%] sm:max-w-[85%] md:max-w-[75%] lg:max-w-[65%] w-full max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-2xl">View Blog Post</DialogTitle>
-            <DialogDescription>
-              Preview of the blog post content
-            </DialogDescription>
-          </DialogHeader>
+      {isViewDialogOpen && viewingPost && (
+        <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+          <DialogContent className="max-w-[95%] sm:max-w-[85%] md:max-w-[75%] lg:max-w-[65%] w-full max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="text-2xl">View Blog Post</DialogTitle>
+              <DialogDescription>
+                Preview of the blog post content
+              </DialogDescription>
+            </DialogHeader>
 
-          {viewingPost && (
             <div className="space-y-6 py-4">
               <div className="space-y-4">
                 <img
@@ -434,23 +438,23 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                 </Button>
               </div>
             </div>
-          )}
-        </DialogContent>
-      </Dialog>
+          </DialogContent>
+        </Dialog>
+      )}
 
       {/* Post Editor Dialog */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[80%] w-full max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-2xl">
-              {editingPost?._index !== undefined ? 'Edit Blog Post' : 'Add New Blog Post'}
-            </DialogTitle>
-            <DialogDescription>
-              Fill in the details below. Use markdown for rich content formatting.
-            </DialogDescription>
-          </DialogHeader>
+      {isDialogOpen && editingPost && (
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent className="max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[80%] w-full max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="text-2xl">
+                {editingPost?._index !== undefined ? 'Edit Blog Post' : 'Add New Blog Post'}
+              </DialogTitle>
+              <DialogDescription>
+                Fill in the details below. Use markdown for rich content formatting.
+              </DialogDescription>
+            </DialogHeader>
 
-          {editingPost && (
             <div className="space-y-8 py-4">
               {/* Basic Information */}
               <div className="space-y-4 p-4 md:p-6 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700">
@@ -703,9 +707,9 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                 </Button>
               </div>
             </div>
-          )}
-        </DialogContent>
-      </Dialog>
+          </DialogContent>
+        </Dialog>
+      )}
     </EditorWrapper>
   );
 };
