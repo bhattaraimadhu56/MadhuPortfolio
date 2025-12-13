@@ -4,16 +4,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Plus, Trash2, Edit2, Save, X, ExternalLink, Github } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { Plus, Trash2, Edit2, Eye, Save, X, ExternalLink, Github } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 
 interface PortfolioEditorProps {
   initialData: any;
@@ -22,8 +15,10 @@ interface PortfolioEditorProps {
 export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData }) => {
   const [data, setData] = useState(initialData);
   const [hasChanges, setHasChanges] = useState(false);
-  const [editingProject, setEditingProject] = useState<any>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [viewingIndex, setViewingIndex] = useState<number | null>(null);
+  const [isAddingNew, setIsAddingNew] = useState(false);
+  const [newProject, setNewProject] = useState<any>(null);
 
   useEffect(() => {
     setHasChanges(JSON.stringify(data) !== JSON.stringify(initialData));
@@ -31,8 +26,10 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
 
   const handleReset = () => {
     setData(initialData);
-    setEditingProject(null);
-    setIsDialogOpen(false);
+    setEditingIndex(null);
+    setViewingIndex(null);
+    setIsAddingNew(false);
+    setNewProject(null);
   };
 
   const updateField = (path: string[], value: any) => {
@@ -49,66 +46,76 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
     });
   };
 
-  const addProject = () => {
-    const newProject = {
-      title: 'New Project',
-      description: 'Detailed description of your project, its goals, technologies used, and outcomes achieved.',
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=500&fit=crop',
-      tags: ['Technology1', 'Technology2'],
-      liveUrl: 'https://example.com/project',
-      githubUrl: 'https://github.com/username/project',
-      category: 'Web Development',
+  // Convert file to base64
+  const handleImageUpload = (file: File, callback: (base64: string) => void) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const base64 = e.target?.result as string;
+      callback(base64);
     };
-    setEditingProject(newProject);
-    setIsDialogOpen(true);
+    reader.readAsDataURL(file);
   };
 
-  const editProject = (index: number) => {
-    setEditingProject({ ...data.projects[index], _index: index });
-    setIsDialogOpen(true);
+  // Add new project
+  const handleAddNew = () => {
+    setIsAddingNew(true);
+    setNewProject({
+      title: '',
+      description: '',
+      image: '',
+      tags: [],
+      liveUrl: '',
+      githubUrl: '',
+      category: '',
+    });
   };
 
-  const saveProject = () => {
-    if (!editingProject) return;
-
-    // Validate required fields
-    if (!editingProject.title || !editingProject.description || !editingProject.category) {
+  // Save new project
+  const handleSaveNewProject = () => {
+    if (!newProject.title || !newProject.description || !newProject.category) {
       alert('Please fill in all required fields: Title, Description, and Category');
       return;
     }
 
-    setData((prev: any) => {
-      const newData = JSON.parse(JSON.stringify(prev));
-      // Ensure projects array exists
-      if (!Array.isArray(newData.projects)) {
-        newData.projects = [];
-      }
+    setData((prev: any) => ({
+      ...prev,
+      projects: [newProject, ...prev.projects],
+    }));
 
-      const projectData = {
-        title: editingProject.title,
-        description: editingProject.description,
-        image: editingProject.image,
-        tags: Array.isArray(editingProject.tags) ? editingProject.tags : [],
-        liveUrl: editingProject.liveUrl,
-        githubUrl: editingProject.githubUrl,
-        category: editingProject.category,
-      };
-
-      if (editingProject._index !== undefined) {
-        // Update existing project
-        newData.projects[editingProject._index] = projectData;
-      } else {
-        // Add new project to the beginning
-        newData.projects.unshift(projectData);
-      }
-      return newData;
-    });
-
-    setEditingProject(null);
-    setIsDialogOpen(false);
+    setIsAddingNew(false);
+    setNewProject(null);
   };
 
-  const removeProject = (index: number) => {
+  // Cancel add
+  const handleCancelAdd = () => {
+    setIsAddingNew(false);
+    setNewProject(null);
+  };
+
+  // Edit project
+  const handleEditProject = (index: number) => {
+    setEditingIndex(index);
+  };
+
+  // Save edited project
+  const handleSaveEditProject = (index: number) => {
+    const project = data.projects[index];
+    if (!project.title || !project.description || !project.category) {
+      alert('Please fill in all required fields: Title, Description, and Category');
+      return;
+    }
+
+    setEditingIndex(null);
+  };
+
+  // Cancel edit
+  const handleCancelEdit = () => {
+    setEditingIndex(null);
+    setData(initialData);
+  };
+
+  // Delete project
+  const handleDeleteProject = (index: number) => {
     if (confirm('Are you sure you want to delete this project?')) {
       setData((prev: any) => ({
         ...prev,
@@ -117,339 +124,670 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
     }
   };
 
-  const updateEditingProject = (field: string, value: any) => {
-    setEditingProject((prev: any) => ({
+  // View project
+  const handleViewProject = (index: number) => {
+    setViewingIndex(index);
+  };
+
+  // Close view
+  const handleCloseView = () => {
+    setViewingIndex(null);
+  };
+
+  // Update project field during edit
+  const updateProjectField = (index: number, field: string, value: any) => {
+    setData((prev: any) => {
+      const newData = JSON.parse(JSON.stringify(prev));
+      newData.projects[index][field] = value;
+      return newData;
+    });
+  };
+
+  // Update new project field
+  const updateNewProjectField = (field: string, value: any) => {
+    setNewProject((prev: any) => ({
       ...prev,
       [field]: value,
     }));
   };
 
-  const addTag = () => {
-    if (editingProject) {
-      setEditingProject((prev: any) => ({
-        ...prev,
-        tags: [...prev.tags, 'new-tag'],
-      }));
-    }
+  // Add tag to new project
+  const addTagToNewProject = () => {
+    setNewProject((prev: any) => ({
+      ...prev,
+      tags: [...(prev.tags || []), 'new-tag'],
+    }));
   };
 
-  const updateTag = (index: number, value: string) => {
-    if (editingProject) {
-      const newTags = [...editingProject.tags];
-      newTags[index] = value;
-      setEditingProject((prev: any) => ({
-        ...prev,
-        tags: newTags,
-      }));
-    }
+  // Update tag in new project
+  const updateNewProjectTag = (tagIndex: number, value: string) => {
+    setNewProject((prev: any) => {
+      const newTags = [...(prev.tags || [])];
+      newTags[tagIndex] = value;
+      return { ...prev, tags: newTags };
+    });
   };
 
-  const removeTag = (index: number) => {
-    if (editingProject) {
-      setEditingProject((prev: any) => ({
-        ...prev,
-        tags: prev.tags.filter((_: any, i: number) => i !== index),
-      }));
-    }
+  // Remove tag from new project
+  const removeNewProjectTag = (tagIndex: number) => {
+    setNewProject((prev: any) => ({
+      ...prev,
+      tags: prev.tags.filter((_: any, i: number) => i !== tagIndex),
+    }));
+  };
+
+  // Add tag to editing project
+  const addTagToEditingProject = (index: number) => {
+    setData((prev: any) => {
+      const newData = JSON.parse(JSON.stringify(prev));
+      newData.projects[index].tags = [...(newData.projects[index].tags || []), 'new-tag'];
+      return newData;
+    });
+  };
+
+  // Update tag in editing project
+  const updateEditingProjectTag = (projectIndex: number, tagIndex: number, value: string) => {
+    setData((prev: any) => {
+      const newData = JSON.parse(JSON.stringify(prev));
+      newData.projects[projectIndex].tags[tagIndex] = value;
+      return newData;
+    });
+  };
+
+  // Remove tag from editing project
+  const removeEditingProjectTag = (projectIndex: number, tagIndex: number) => {
+    setData((prev: any) => {
+      const newData = JSON.parse(JSON.stringify(prev));
+      newData.projects[projectIndex].tags = newData.projects[projectIndex].tags.filter(
+        (_: any, i: number) => i !== tagIndex
+      );
+      return newData;
+    });
   };
 
   return (
     <EditorWrapper
-      data={data}
-      hasChanges={hasChanges}
-      onReset={handleReset}
       fileName="portfolio_content.json"
+      data={data}
+      onReset={handleReset}
+      hasChanges={hasChanges}
     >
-      <div className="space-y-8">
-        {/* Page Settings */}
-        <Card>
-          <CardContent className="pt-6 space-y-4">
-            <h3 className="text-lg font-semibold">Page Settings</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="pageTitle">Page Title</Label>
-                <Input
-                  id="pageTitle"
-                  value={data.pageTitle}
-                  onChange={(e) => updateField(['pageTitle'], e.target.value)}
-                  placeholder="Portfolio"
-                />
-              </div>
-              <div>
-                <Label htmlFor="filterLabel">Filter Label</Label>
-                <Input
-                  id="filterLabel"
-                  value={data.filterLabel}
-                  onChange={(e) => updateField(['filterLabel'], e.target.value)}
-                  placeholder="Filter by skill:"
-                />
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="pageSubtitle">Page Subtitle</Label>
-              <Input
-                id="pageSubtitle"
-                value={data.pageSubtitle}
-                onChange={(e) => updateField(['pageSubtitle'], e.target.value)}
-                placeholder="Showcase of my projects"
-              />
-            </div>
-            <div>
-              <Label htmlFor="emptyMessage">Empty Message</Label>
-              <Input
-                id="emptyMessage"
-                value={data.emptyMessage}
-                onChange={(e) => updateField(['emptyMessage'], e.target.value)}
-                placeholder="No projects yet"
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Separator />
-
-        {/* Projects Management */}
-        <div>
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-2xl font-bold">Projects ({data.projects.length})</h3>
-            <Button onClick={addProject} className="gap-2">
-              <Plus className="h-4 w-4" />
-              Add New Project
-            </Button>
+      {/* Page Settings */}
+      <div className="space-y-6 p-4 md:p-6 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm mb-8">
+        <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+          <span className="w-1 h-6 bg-primary rounded-full"></span>
+          Page Settings
+        </h3>
+        
+        <div className="space-y-4">
+          <div className="space-y-2 w-4/5">
+            <Label htmlFor="pageTitle" className="text-sm font-semibold">Page Title</Label>
+            <Input
+              id="pageTitle"
+              value={data.pageTitle}
+              onChange={(e) => updateField(['pageTitle'], e.target.value)}
+              className="w-full"
+            />
           </div>
 
-          <div className="grid grid-cols-1 gap-4">
-            {data.projects.map((project: any, index: number) => (
-              <Card key={index} className="overflow-hidden">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-48 h-32 object-cover rounded"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src =
-                          'https://via.placeholder.com/400x300?text=No+Image';
+          <div className="space-y-2 w-4/5">
+            <Label htmlFor="filterLabel" className="text-sm font-semibold">Filter Label</Label>
+            <Input
+              id="filterLabel"
+              value={data.filterLabel}
+              onChange={(e) => updateField(['filterLabel'], e.target.value)}
+              className="w-full"
+            />
+          </div>
+
+          <div className="space-y-2 w-4/5">
+            <Label htmlFor="pageSubtitle" className="text-sm font-semibold">Page Subtitle</Label>
+            <Input
+              id="pageSubtitle"
+              value={data.pageSubtitle}
+              onChange={(e) => updateField(['pageSubtitle'], e.target.value)}
+              className="w-full"
+            />
+          </div>
+
+          <div className="space-y-2 w-4/5">
+            <Label htmlFor="emptyMessage" className="text-sm font-semibold">Empty Message</Label>
+            <Input
+              id="emptyMessage"
+              value={data.emptyMessage}
+              onChange={(e) => updateField(['emptyMessage'], e.target.value)}
+              className="w-full"
+            />
+          </div>
+        </div>
+      </div>
+
+      <Separator className="my-8" />
+
+      {/* Projects Table */}
+      <div className="space-y-6">
+        {/* Header with Add Button */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg border border-primary/20">
+          <div>
+            <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100">Portfolio Projects</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+              {data.projects.length} {data.projects.length === 1 ? 'project' : 'projects'} total
+            </p>
+          </div>
+          {!isAddingNew && (
+            <Button 
+              size="lg" 
+              onClick={handleAddNew}
+              className="w-full sm:w-auto shadow-md hover:shadow-lg transition-all duration-200"
+            >
+              <Plus className="h-5 w-5 mr-2" />
+              Add New Project
+            </Button>
+          )}
+        </div>
+
+        {/* Add New Project Form */}
+        {isAddingNew && newProject && (
+          <Card className="p-6 border-2 border-primary/50 bg-gradient-to-br from-primary/5 to-transparent">
+            <h4 className="text-lg font-bold mb-6 text-slate-800 dark:text-slate-100">Add New Project</h4>
+            
+            <div className="space-y-6">
+              {/* Basic Information */}
+              <div className="space-y-4">
+                <h5 className="font-semibold text-slate-700 dark:text-slate-300">Basic Information</h5>
+                
+                <div className="space-y-2 w-4/5">
+                  <Label className="text-sm font-semibold">Project Title *</Label>
+                  <Input
+                    type="text"
+                    value={newProject.title}
+                    onChange={(e) => updateNewProjectField('title', e.target.value)}
+                    placeholder="My Awesome Project"
+                    className="w-full"
+                  />
+                </div>
+
+                <div className="space-y-2 w-4/5">
+                  <Label className="text-sm font-semibold">Category *</Label>
+                  <Input
+                    type="text"
+                    value={newProject.category}
+                    onChange={(e) => updateNewProjectField('category', e.target.value)}
+                    placeholder="Web Development, Data Analysis, etc."
+                    className="w-full"
+                  />
+                </div>
+
+                <div className="space-y-2 w-4/5">
+                  <Label className="text-sm font-semibold">Description *</Label>
+                  <Textarea
+                    value={newProject.description}
+                    onChange={(e) => updateNewProjectField('description', e.target.value)}
+                    placeholder="Detailed description of your project, technologies used, challenges overcome, and results achieved..."
+                    rows={2}
+                    className="w-full resize-y min-h-[60px]"
+                  />
+                </div>
+              </div>
+
+              {/* Image Upload */}
+              <div className="space-y-4">
+                <h5 className="font-semibold text-slate-700 dark:text-slate-300">Project Image</h5>
+                
+                <div className="space-y-2 w-4/5">
+                  <Label className="text-sm font-semibold">Upload Image from Computer</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          handleImageUpload(file, (base64) => {
+                            updateNewProjectField('image', base64);
+                          });
+                        }
                       }}
+                      className="w-full"
                     />
-                    <div className="flex-1 min-w-0">
-                      <h4 className="text-lg font-semibold mb-2">{project.title}</h4>
-                      <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
-                        {project.description}
-                      </p>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
-                        <span className="px-2 py-1 bg-secondary rounded">{project.category}</span>
-                      </div>
-                      <div className="flex flex-wrap gap-1 mb-2">
-                        {project.tags.map((tag: string, tagIndex: number) => (
-                          <span
-                            key={tagIndex}
-                            className="px-2 py-1 text-xs bg-primary/10 text-primary rounded"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                      <div className="flex gap-3 text-xs">
-                        {project.liveUrl && (
-                          <a
-                            href={project.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-1 text-blue-600 hover:underline"
-                          >
-                            <ExternalLink className="h-3 w-3" />
-                            Live Demo
-                          </a>
-                        )}
-                        {project.githubUrl && (
-                          <a
-                            href={project.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-1 text-blue-600 hover:underline"
-                          >
-                            <Github className="h-3 w-3" />
-                            GitHub
-                          </a>
-                        )}
-                      </div>
+                  </div>
+                  {newProject.image && (
+                    <div className="mt-4">
+                      <img
+                        src={newProject.image}
+                        alt="Preview"
+                        className="max-w-full h-auto max-h-64 rounded-lg shadow-md"
+                      />
                     </div>
-                    <div className="flex gap-2">
+                  )}
+                </div>
+              </div>
+
+              {/* Project Links */}
+              <div className="space-y-4">
+                <h5 className="font-semibold text-slate-700 dark:text-slate-300">Project Links</h5>
+                
+                <div className="space-y-4 w-4/5">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold">Live Demo URL</Label>
+                    <Input
+                      type="url"
+                      value={newProject.liveUrl}
+                      onChange={(e) => updateNewProjectField('liveUrl', e.target.value)}
+                      placeholder="https://example.com/demo"
+                      className="w-full"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold">GitHub Repository URL</Label>
+                    <Input
+                      type="url"
+                      value={newProject.githubUrl}
+                      onChange={(e) => updateNewProjectField('githubUrl', e.target.value)}
+                      placeholder="https://github.com/username/project"
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Tags */}
+              <div className="space-y-4">
+                <h5 className="font-semibold text-slate-700 dark:text-slate-300">Technologies & Tags</h5>
+                
+                <div className="space-y-3 w-4/5">
+                  {newProject.tags?.map((tag: string, tagIndex: number) => (
+                    <div key={tagIndex} className="flex gap-2">
+                      <Input
+                        type="text"
+                        value={tag}
+                        onChange={(e) => updateNewProjectTag(tagIndex, e.target.value)}
+                        placeholder="Technology or skill"
+                        className="w-full"
+                      />
                       <Button
+                        type="button"
                         variant="outline"
                         size="sm"
-                        onClick={() => editProject(index)}
-                        className="gap-2"
+                        onClick={() => removeNewProjectTag(tagIndex)}
+                        className="text-destructive"
                       >
-                        <Edit2 className="h-4 w-4" />
-                        Edit
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={addTagToNewProject}
+                    className="w-full"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Tag
+                  </Button>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t w-4/5">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleCancelAdd}
+                  className="w-full sm:w-auto"
+                >
+                  <X className="h-4 w-4 mr-2" />
+                  Cancel
+                </Button>
+                <Button
+                  type="button"
+                  onClick={handleSaveNewProject}
+                  className="w-full sm:w-auto gap-2"
+                >
+                  <Save className="h-4 w-4" />
+                  Save Project
+                </Button>
+              </div>
+            </div>
+          </Card>
+        )}
+
+        {/* Projects Table */}
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-slate-100 dark:bg-slate-800 border-b-2 border-slate-200 dark:border-slate-700">
+                <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700 dark:text-slate-300">Title</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700 dark:text-slate-300">Category</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700 dark:text-slate-300">Tags</th>
+                <th className="px-4 py-3 text-center text-sm font-semibold text-slate-700 dark:text-slate-300">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.projects.map((project: any, index: number) => (
+                <tr key={index} className="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                  <td className="px-4 py-3 text-sm text-slate-800 dark:text-slate-200">{project.title}</td>
+                  <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-400">{project.category}</td>
+                  <td className="px-4 py-3 text-sm">
+                    <div className="flex flex-wrap gap-1">
+                      {project.tags?.slice(0, 2).map((tag: string, i: number) => (
+                        <span key={i} className="text-xs px-2 py-1 bg-primary/15 text-primary rounded">
+                          {tag}
+                        </span>
+                      ))}
+                      {project.tags?.length > 2 && (
+                        <span className="text-xs px-2 py-1 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400 rounded">
+                          +{project.tags.length - 2}
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-sm">
+                    <div className="flex gap-2 justify-center">
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleViewProject(index)}
+                        className="hover:bg-blue-50 dark:hover:bg-blue-900"
+                      >
+                        <Eye className="h-4 w-4" />
                       </Button>
                       <Button
-                        variant="destructive"
+                        type="button"
                         size="sm"
-                        onClick={() => removeProject(index)}
+                        variant="outline"
+                        onClick={() => handleEditProject(index)}
+                        className="hover:bg-primary/10"
+                      >
+                        <Edit2 className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleDeleteProject(index)}
+                        className="text-destructive hover:bg-destructive/10"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
-        {/* Edit/Add Project Dialog */}
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="max-w-[90%] w-full max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>
-                {editingProject?._index !== undefined ? 'Edit Project' : 'Add New Project'}
-              </DialogTitle>
-              <DialogDescription>
-                Fill in the project details below. Provide comprehensive information about your work.
-              </DialogDescription>
-            </DialogHeader>
+        {data.projects.length === 0 && !isAddingNew && (
+          <div className="text-center py-12 text-slate-500 dark:text-slate-400">
+            <p>No projects yet. Click "Add New Project" to create one.</p>
+          </div>
+        )}
+      </div>
 
-            {editingProject && (
-              <div className="space-y-6 py-4">
-                {/* Basic Information */}
-                <div className="space-y-4">
-                  <h4 className="font-semibold text-lg">Basic Information</h4>
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="edit-title">Project Title *</Label>
-                      <Input
-                        id="edit-title"
-                        value={editingProject.title}
-                        onChange={(e) => updateEditingProject('title', e.target.value)}
-                        placeholder="My Awesome Project"
-                        className="text-lg"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="edit-category">Category *</Label>
-                      <Input
-                        id="edit-category"
-                        value={editingProject.category}
-                        onChange={(e) => updateEditingProject('category', e.target.value)}
-                        placeholder="Web Development, Data Analysis, etc."
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="edit-description">Description *</Label>
-                      <Textarea
-                        id="edit-description"
-                        value={editingProject.description}
-                        onChange={(e) => updateEditingProject('description', e.target.value)}
-                        placeholder="Detailed description of your project, technologies used, challenges overcome, and results achieved..."
-                        rows={12}
-                        className="w-full resize-y"
-                      />
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Provide a comprehensive description of your project (200-500 words recommended)
-                      </p>
-                    </div>
-                  </div>
+      {/* View Project */}
+      {viewingIndex !== null && data.projects[viewingIndex] && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-4">
+                <h3 className="text-2xl font-bold">{data.projects[viewingIndex].title}</h3>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleCloseView}
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+
+              <div className="space-y-4 mb-6">
+                {data.projects[viewingIndex].image && (
+                  <img
+                    src={data.projects[viewingIndex].image}
+                    alt={data.projects[viewingIndex].title}
+                    className="w-full h-64 object-cover rounded-lg"
+                  />
+                )}
+                <div>
+                  <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Category</p>
+                  <p className="text-muted-foreground">{data.projects[viewingIndex].category}</p>
                 </div>
-
+                <div>
+                  <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Description</p>
+                  <p className="text-muted-foreground whitespace-pre-wrap">{data.projects[viewingIndex].description}</p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {data.projects[viewingIndex].tags?.map((tag: string, i: number) => (
+                    <span key={i} className="text-xs px-2.5 py-1 bg-primary/15 text-primary rounded-full">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
                 <Separator />
-
-                {/* Links */}
-                <div className="space-y-4">
-                  <h4 className="font-semibold text-lg">Project Links</h4>
-                  <div className="grid grid-cols-1 gap-4">
-                    <div>
-                      <Label htmlFor="edit-image">Project Image URL *</Label>
-                      <Input
-                        id="edit-image"
-                        value={editingProject.image}
-                        onChange={(e) => updateEditingProject('image', e.target.value)}
-                        placeholder="https://example.com/project-image.jpg"
-                      />
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Use a high-quality image (recommended: 800x500px or 16:10 ratio)
-                      </p>
-                    </div>
-                    <div>
-                      <Label htmlFor="edit-liveUrl">Live Demo URL</Label>
-                      <Input
-                        id="edit-liveUrl"
-                        value={editingProject.liveUrl}
-                        onChange={(e) => updateEditingProject('liveUrl', e.target.value)}
-                        placeholder="https://example.com/demo"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="edit-githubUrl">GitHub Repository URL</Label>
-                      <Input
-                        id="edit-githubUrl"
-                        value={editingProject.githubUrl}
-                        onChange={(e) => updateEditingProject('githubUrl', e.target.value)}
-                        placeholder="https://github.com/username/repository"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <Separator />
-
-                {/* Tags/Technologies */}
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h4 className="font-semibold text-lg">Technologies & Tags</h4>
-                    <Button type="button" variant="outline" size="sm" onClick={addTag}>
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add Tag
-                    </Button>
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                    {editingProject.tags.map((tag: string, tagIndex: number) => (
-                      <div key={tagIndex} className="flex gap-2">
-                        <Input
-                          value={tag}
-                          onChange={(e) => updateTag(tagIndex, e.target.value)}
-                          placeholder="Technology name"
-                        />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeTag(tagIndex)}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Add technologies, tools, and frameworks used in this project
-                  </p>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex justify-end gap-2 pt-4">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => {
-                      setEditingProject(null);
-                      setIsDialogOpen(false);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="button" onClick={saveProject} className="gap-2">
-                    <Save className="h-4 w-4" />
-                    Save Project
-                  </Button>
+                <div className="flex gap-4">
+                  {data.projects[viewingIndex].liveUrl && (
+                    <a
+                      href={data.projects[viewingIndex].liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-blue-600 hover:underline"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                      Live Demo
+                    </a>
+                  )}
+                  {data.projects[viewingIndex].githubUrl && (
+                    <a
+                      href={data.projects[viewingIndex].githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-blue-600 hover:underline"
+                    >
+                      <Github className="h-4 w-4" />
+                      GitHub
+                    </a>
+                  )}
                 </div>
               </div>
-            )}
-          </DialogContent>
-        </Dialog>
-      </div>
+
+              <div className="flex gap-2 pt-4 border-t">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleCloseView}
+                  className="flex-1"
+                >
+                  Close
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    handleCloseView();
+                    handleEditProject(viewingIndex);
+                  }}
+                  className="flex-1"
+                >
+                  <Edit2 className="h-4 w-4 mr-2" />
+                  Edit
+                </Button>
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Edit Project */}
+      {editingIndex !== null && data.projects[editingIndex] && (
+        <Card className="p-6 border-2 border-primary/50 bg-gradient-to-br from-primary/5 to-transparent mt-8">
+          <h4 className="text-lg font-bold mb-6 text-slate-800 dark:text-slate-100">Edit Project</h4>
+          
+          <div className="space-y-6">
+            {/* Basic Information */}
+            <div className="space-y-4">
+              <h5 className="font-semibold text-slate-700 dark:text-slate-300">Basic Information</h5>
+              
+              <div className="space-y-2 w-4/5">
+                <Label className="text-sm font-semibold">Project Title *</Label>
+                <Input
+                  type="text"
+                  value={data.projects[editingIndex].title}
+                  onChange={(e) => updateProjectField(editingIndex, 'title', e.target.value)}
+                  placeholder="My Awesome Project"
+                  className="w-full"
+                />
+              </div>
+
+              <div className="space-y-2 w-4/5">
+                <Label className="text-sm font-semibold">Category *</Label>
+                <Input
+                  type="text"
+                  value={data.projects[editingIndex].category}
+                  onChange={(e) => updateProjectField(editingIndex, 'category', e.target.value)}
+                  placeholder="Web Development, Data Analysis, etc."
+                  className="w-full"
+                />
+              </div>
+
+              <div className="space-y-2 w-4/5">
+                <Label className="text-sm font-semibold">Description *</Label>
+                <Textarea
+                  value={data.projects[editingIndex].description}
+                  onChange={(e) => updateProjectField(editingIndex, 'description', e.target.value)}
+                  placeholder="Detailed description of your project..."
+                  rows={2}
+                  className="w-full resize-y min-h-[60px]"
+                />
+              </div>
+            </div>
+
+            {/* Image Upload */}
+            <div className="space-y-4">
+              <h5 className="font-semibold text-slate-700 dark:text-slate-300">Project Image</h5>
+              
+              <div className="space-y-2 w-4/5">
+                <Label className="text-sm font-semibold">Upload Image from Computer</Label>
+                <div className="flex gap-2">
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        handleImageUpload(file, (base64) => {
+                          updateProjectField(editingIndex, 'image', base64);
+                        });
+                      }
+                    }}
+                    className="w-full"
+                  />
+                </div>
+                {data.projects[editingIndex].image && (
+                  <div className="mt-4">
+                    <img
+                      src={data.projects[editingIndex].image}
+                      alt="Preview"
+                      className="max-w-full h-auto max-h-64 rounded-lg shadow-md"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Project Links */}
+            <div className="space-y-4">
+              <h5 className="font-semibold text-slate-700 dark:text-slate-300">Project Links</h5>
+              
+              <div className="space-y-4 w-4/5">
+                <div className="space-y-2">
+                  <Label className="text-sm font-semibold">Live Demo URL</Label>
+                  <Input
+                    type="url"
+                    value={data.projects[editingIndex].liveUrl}
+                    onChange={(e) => updateProjectField(editingIndex, 'liveUrl', e.target.value)}
+                    placeholder="https://example.com/demo"
+                    className="w-full"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-sm font-semibold">GitHub Repository URL</Label>
+                  <Input
+                    type="url"
+                    value={data.projects[editingIndex].githubUrl}
+                    onChange={(e) => updateProjectField(editingIndex, 'githubUrl', e.target.value)}
+                    placeholder="https://github.com/username/project"
+                    className="w-full"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Tags */}
+            <div className="space-y-4">
+              <h5 className="font-semibold text-slate-700 dark:text-slate-300">Technologies & Tags</h5>
+              
+              <div className="space-y-3 w-4/5">
+                {data.projects[editingIndex].tags?.map((tag: string, tagIndex: number) => (
+                  <div key={tagIndex} className="flex gap-2">
+                    <Input
+                      type="text"
+                      value={tag}
+                      onChange={(e) => updateEditingProjectTag(editingIndex, tagIndex, e.target.value)}
+                      placeholder="Technology or skill"
+                      className="w-full"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeEditingProjectTag(editingIndex, tagIndex)}
+                      className="text-destructive"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => addTagToEditingProject(editingIndex)}
+                  className="w-full"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Tag
+                </Button>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t w-4/5">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleCancelEdit}
+                className="w-full sm:w-auto"
+              >
+                <X className="h-4 w-4 mr-2" />
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                onClick={() => handleSaveEditProject(editingIndex)}
+                className="w-full sm:w-auto gap-2"
+              >
+                <Save className="h-4 w-4" />
+                Save Project
+              </Button>
+            </div>
+          </div>
+        </Card>
+      )}
     </EditorWrapper>
   );
 };
