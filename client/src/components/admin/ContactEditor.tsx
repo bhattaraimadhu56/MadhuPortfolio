@@ -57,7 +57,7 @@ export const ContactEditor: React.FC<ContactEditorProps> = ({ initialData }) => 
               value={data.pageTitle || ''}
               onChange={(e) => setData({ ...data, pageTitle: e.target.value })}
               placeholder="Enter page title"
-              className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
@@ -68,7 +68,7 @@ export const ContactEditor: React.FC<ContactEditorProps> = ({ initialData }) => 
               onChange={(e) => setData({ ...data, pageSubtitle: e.target.value })}
               placeholder="Enter page subtitle"
               rows={2}
-              className="w-full resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
@@ -79,7 +79,7 @@ export const ContactEditor: React.FC<ContactEditorProps> = ({ initialData }) => 
               onChange={(e) => setData({ ...data, introductionText: e.target.value })}
               placeholder="Enter introduction text"
               rows={3}
-              className="w-full resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
@@ -89,7 +89,7 @@ export const ContactEditor: React.FC<ContactEditorProps> = ({ initialData }) => 
               value={data.responseTime || ''}
               onChange={(e) => setData({ ...data, responseTime: e.target.value })}
               placeholder="e.g., 24 hours"
-              className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
         </div>
@@ -162,33 +162,33 @@ export const ContactEditor: React.FC<ContactEditorProps> = ({ initialData }) => 
             <div className="space-y-4">
               <div className="w-4/5 space-y-2">
                 <label className="text-sm font-medium text-foreground">Type</label>
-                <Input
-                  value={data.contactMethods[editingContactId].type}
-                  onChange={(e) => updateContactMethod(editingContactId, 'type', e.target.value)}
-                  placeholder="e.g., Email, Phone, LinkedIn"
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
-                />
+                  <Input
+                    value={data.contactMethods[editingContactId].type}
+                    onChange={(e) => updateContactMethod(editingContactId, 'type', e.target.value)}
+                    placeholder="e.g., Email, Phone, LinkedIn"
+                    className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  />
               </div>
 
               <div className="w-4/5 space-y-2">
                 <label className="text-sm font-medium text-foreground">Value</label>
-                <Input
-                  value={data.contactMethods[editingContactId].value}
-                  onChange={(e) => updateContactMethod(editingContactId, 'value', e.target.value)}
-                  placeholder="e.g., contact@example.com"
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
-                />
+                  <Input
+                    value={data.contactMethods[editingContactId].value}
+                    onChange={(e) => updateContactMethod(editingContactId, 'value', e.target.value)}
+                    placeholder="e.g., contact@example.com"
+                    className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  />
               </div>
 
               <div className="w-4/5 space-y-2">
                 <label className="text-sm font-medium text-foreground">Icon</label>
-                <Input
-                  value={data.contactMethods[editingContactId].icon}
-                  onChange={(e) => updateContactMethod(editingContactId, 'icon', e.target.value)}
-                  maxLength={2}
-                  placeholder="e.g., ✉️"
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
-                />
+                  <Input
+                    value={data.contactMethods[editingContactId].icon}
+                    onChange={(e) => updateContactMethod(editingContactId, 'icon', e.target.value)}
+                    maxLength={2}
+                    placeholder="e.g., ✉️"
+                    className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  />
               </div>
 
               <div className="flex gap-2 pt-4">
@@ -244,7 +244,7 @@ export const ContactEditor: React.FC<ContactEditorProps> = ({ initialData }) => 
                 formSettings: { ...data.formSettings, title: e.target.value }
               })}
               placeholder="Enter form title"
-              className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
@@ -258,7 +258,7 @@ export const ContactEditor: React.FC<ContactEditorProps> = ({ initialData }) => 
               })}
               placeholder="Enter form description"
               rows={2}
-              className="w-full resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
@@ -271,7 +271,7 @@ export const ContactEditor: React.FC<ContactEditorProps> = ({ initialData }) => 
                 formSettings: { ...data.formSettings, submitButtonText: e.target.value }
               })}
               placeholder="e.g., Send Message"
-              className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
@@ -285,7 +285,7 @@ export const ContactEditor: React.FC<ContactEditorProps> = ({ initialData }) => 
               })}
               placeholder="Enter success message"
               rows={2}
-              className="w-full resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
         </div>

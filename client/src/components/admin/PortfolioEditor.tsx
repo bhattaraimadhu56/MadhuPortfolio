@@ -73,7 +73,7 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
               value={data.pageTitle || ''}
               onChange={(e) => setData({ ...data, pageTitle: e.target.value })}
               placeholder="Enter page title"
-              className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
@@ -84,7 +84,7 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
               onChange={(e) => setData({ ...data, pageSubtitle: e.target.value })}
               placeholder="Enter page subtitle"
               rows={2}
-              className="w-full resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
@@ -95,7 +95,7 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
               onChange={(e) => setData({ ...data, description: e.target.value })}
               placeholder="Enter portfolio description"
               rows={3}
-              className="w-full resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
         </div>
@@ -179,7 +179,7 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
                 <Input
                   value={data.projects[editingProjectId].title}
                   onChange={(e) => updateProject(editingProjectId, 'title', e.target.value)}
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -189,7 +189,7 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
                   value={data.projects[editingProjectId].category}
                   onChange={(e) => updateProject(editingProjectId, 'category', e.target.value)}
                   placeholder="e.g., Web Development, Mobile App"
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -199,7 +199,7 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
                   value={data.projects[editingProjectId].description}
                   onChange={(e) => updateProject(editingProjectId, 'description', e.target.value)}
                   rows={3}
-                  className="w-full resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -213,7 +213,7 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
                       handleProjectImageUpload(editingProjectId, e.target.files[0]);
                     }
                   }}
-                  className="w-full p-2 border border-border rounded transition-all duration-200 hover:border-primary/50"
+                  className="w-4/5 p-2 border border-border rounded transition-all duration-200 hover:border-primary/50"
                 />
                 {data.projects[editingProjectId].image && (
                   <img
@@ -232,7 +232,7 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
                     : ''}
                   onChange={(e) => updateProject(editingProjectId, 'tags', e.target.value.split(',').map(t => t.trim()))}
                   placeholder="e.g., React, TypeScript, Tailwind"
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -242,7 +242,7 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
                   value={data.projects[editingProjectId].liveUrl}
                   onChange={(e) => updateProject(editingProjectId, 'liveUrl', e.target.value)}
                   placeholder="https://example.com"
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -252,7 +252,7 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
                   value={data.projects[editingProjectId].githubUrl}
                   onChange={(e) => updateProject(editingProjectId, 'githubUrl', e.target.value)}
                   placeholder="https://github.com/username/repo"
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 

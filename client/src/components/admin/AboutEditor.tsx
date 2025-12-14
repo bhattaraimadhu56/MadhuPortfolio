@@ -97,7 +97,7 @@ export const AboutEditor: React.FC<AboutEditorProps> = ({ initialData }) => {
               value={data.pageTitle || ''}
               onChange={(e) => setData({ ...data, pageTitle: e.target.value })}
               placeholder="Enter page title"
-              className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
@@ -108,7 +108,7 @@ export const AboutEditor: React.FC<AboutEditorProps> = ({ initialData }) => {
               onChange={(e) => setData({ ...data, pageSubtitle: e.target.value })}
               placeholder="Enter page subtitle"
               rows={2}
-              className="w-full resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
@@ -122,7 +122,7 @@ export const AboutEditor: React.FC<AboutEditorProps> = ({ initialData }) => {
               })}
               placeholder="Enter your personal story"
               rows={4}
-              className="w-full resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
         </div>
@@ -198,7 +198,7 @@ export const AboutEditor: React.FC<AboutEditorProps> = ({ initialData }) => {
                 <Input
                   value={data.workExperience.items[editingExperienceId].position}
                   onChange={(e) => updateExperience(editingExperienceId, 'position', e.target.value)}
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -207,7 +207,7 @@ export const AboutEditor: React.FC<AboutEditorProps> = ({ initialData }) => {
                 <Input
                   value={data.workExperience.items[editingExperienceId].company}
                   onChange={(e) => updateExperience(editingExperienceId, 'company', e.target.value)}
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -217,7 +217,7 @@ export const AboutEditor: React.FC<AboutEditorProps> = ({ initialData }) => {
                   value={data.workExperience.items[editingExperienceId].duration}
                   onChange={(e) => updateExperience(editingExperienceId, 'duration', e.target.value)}
                   placeholder="e.g., 2020 - 2024"
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -227,7 +227,7 @@ export const AboutEditor: React.FC<AboutEditorProps> = ({ initialData }) => {
                   value={data.workExperience.items[editingExperienceId].description}
                   onChange={(e) => updateExperience(editingExperienceId, 'description', e.target.value)}
                   rows={3}
-                  className="w-full resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -341,7 +341,7 @@ export const AboutEditor: React.FC<AboutEditorProps> = ({ initialData }) => {
                 <Input
                   value={data.education.items[editingEducationId].degree}
                   onChange={(e) => updateEducation(editingEducationId, 'degree', e.target.value)}
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -350,7 +350,7 @@ export const AboutEditor: React.FC<AboutEditorProps> = ({ initialData }) => {
                 <Input
                   value={data.education.items[editingEducationId].school}
                   onChange={(e) => updateEducation(editingEducationId, 'school', e.target.value)}
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -359,7 +359,7 @@ export const AboutEditor: React.FC<AboutEditorProps> = ({ initialData }) => {
                 <Input
                   value={data.education.items[editingEducationId].year}
                   onChange={(e) => updateEducation(editingEducationId, 'year', e.target.value)}
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -369,7 +369,7 @@ export const AboutEditor: React.FC<AboutEditorProps> = ({ initialData }) => {
                   value={data.education.items[editingEducationId].details}
                   onChange={(e) => updateEducation(editingEducationId, 'details', e.target.value)}
                   rows={2}
-                  className="w-full resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 

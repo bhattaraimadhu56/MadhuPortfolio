@@ -68,54 +68,54 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
             <div className="space-y-6">
               <div className="w-4/5 space-y-2">
                 <label className="text-sm font-medium text-foreground">Site Title</label>
-                <Input
-                  value={data.siteTitle || ''}
-                  onChange={(e) => setData({ ...data, siteTitle: e.target.value })}
-                  placeholder="Enter site title"
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
-                />
+              <Input
+                value={data.siteTitle || ''}
+                onChange={(e) => setData({ ...data, siteTitle: e.target.value })}
+                placeholder="Enter site title"
+                className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              />
               </div>
 
               <div className="w-4/5 space-y-2">
                 <label className="text-sm font-medium text-foreground">Site Description</label>
-                <Textarea
-                  value={data.siteDescription || ''}
-                  onChange={(e) => setData({ ...data, siteDescription: e.target.value })}
-                  placeholder="Enter site description"
-                  rows={3}
-                  className="w-full resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
-                />
+              <Textarea
+                value={data.siteDescription || ''}
+                onChange={(e) => setData({ ...data, siteDescription: e.target.value })}
+                placeholder="Enter site description"
+                rows={3}
+                className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              />
               </div>
 
               <div className="w-4/5 space-y-2">
                 <label className="text-sm font-medium text-foreground">Author Name</label>
-                <Input
-                  value={data.authorName || ''}
-                  onChange={(e) => setData({ ...data, authorName: e.target.value })}
-                  placeholder="Enter author name"
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
-                />
+              <Input
+                value={data.authorName || ''}
+                onChange={(e) => setData({ ...data, authorName: e.target.value })}
+                placeholder="Enter author name"
+                className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              />
               </div>
 
               <div className="w-4/5 space-y-2">
                 <label className="text-sm font-medium text-foreground">Author Email</label>
-                <Input
-                  value={data.authorEmail || ''}
-                  onChange={(e) => setData({ ...data, authorEmail: e.target.value })}
-                  placeholder="Enter author email"
-                  type="email"
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
-                />
+              <Input
+                value={data.authorEmail || ''}
+                onChange={(e) => setData({ ...data, authorEmail: e.target.value })}
+                placeholder="Enter author email"
+                type="email"
+                className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              />
               </div>
 
               <div className="w-4/5 space-y-2">
                 <label className="text-sm font-medium text-foreground">Site URL</label>
-                <Input
-                  value={data.siteUrl || ''}
-                  onChange={(e) => setData({ ...data, siteUrl: e.target.value })}
-                  placeholder="e.g., https://example.com"
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
-                />
+              <Input
+                value={data.siteUrl || ''}
+                onChange={(e) => setData({ ...data, siteUrl: e.target.value })}
+                placeholder="e.g., https://example.com"
+                className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              />
               </div>
             </div>
           </Card>
@@ -136,7 +136,7 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
                     header: { ...data.header, title: e.target.value }
                   })}
                   placeholder="Enter header title"
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -149,7 +149,7 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
                     header: { ...data.header, subtitle: e.target.value }
                   })}
                   placeholder="Enter header subtitle"
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -162,7 +162,7 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
                     header: { ...data.header, logo: e.target.value }
                   })}
                   placeholder="Enter logo URL"
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
             </div>
@@ -236,7 +236,7 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
                     <Input
                       value={data.header.navigationLinks[editingNavId].label}
                       onChange={(e) => updateNavigationLink(editingNavId, 'label', e.target.value)}
-                      className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                      className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
 
@@ -246,7 +246,7 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
                       value={data.header.navigationLinks[editingNavId].href}
                       onChange={(e) => updateNavigationLink(editingNavId, 'href', e.target.value)}
                       placeholder="e.g., /about or https://example.com"
-                      className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                      className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
 
@@ -304,7 +304,7 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
                     theme: { ...data.theme, primaryColor: e.target.value }
                   })}
                   type="color"
-                  className="w-full h-10 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 h-10 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -317,7 +317,7 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
                     theme: { ...data.theme, secondaryColor: e.target.value }
                   })}
                   type="color"
-                  className="w-full h-10 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 h-10 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -330,7 +330,7 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
                     theme: { ...data.theme, fontFamily: e.target.value }
                   })}
                   placeholder="e.g., Inter, Roboto, Poppins"
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -342,7 +342,7 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
                     ...data,
                     theme: { ...data.theme, darkMode: e.target.value }
                   })}
-                  className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 px-3 py-2 border border-border rounded-md bg-background text-foreground transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 >
                   <option value="auto">Auto</option>
                   <option value="light">Light</option>

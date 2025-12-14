@@ -69,7 +69,7 @@ export const FooterEditor: React.FC<FooterEditorProps> = ({ initialData }) => {
               value={data.copyright || ''}
               onChange={(e) => setData({ ...data, copyright: e.target.value })}
               placeholder="e.g., © 2024 Your Name. All rights reserved."
-              className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
@@ -80,7 +80,7 @@ export const FooterEditor: React.FC<FooterEditorProps> = ({ initialData }) => {
               onChange={(e) => setData({ ...data, description: e.target.value })}
               placeholder="Enter footer description"
               rows={2}
-              className="w-full resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
@@ -91,7 +91,7 @@ export const FooterEditor: React.FC<FooterEditorProps> = ({ initialData }) => {
               onChange={(e) => setData({ ...data, socialLinks: e.target.value })}
               placeholder="Enter social media links (one per line)"
               rows={3}
-              className="w-full resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
         </div>
@@ -106,7 +106,7 @@ export const FooterEditor: React.FC<FooterEditorProps> = ({ initialData }) => {
               <Input
                 value={section.title}
                 onChange={(e) => updateSectionTitle(sectionIndex, e.target.value)}
-                className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
             <Button
@@ -173,7 +173,7 @@ export const FooterEditor: React.FC<FooterEditorProps> = ({ initialData }) => {
                   <Input
                     value={section.links[editingLinkId.link].label}
                     onChange={(e) => updateLink(sectionIndex, editingLinkId.link, 'label', e.target.value)}
-                    className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                    className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
 
@@ -183,7 +183,7 @@ export const FooterEditor: React.FC<FooterEditorProps> = ({ initialData }) => {
                     value={section.links[editingLinkId.link].href}
                     onChange={(e) => updateLink(sectionIndex, editingLinkId.link, 'href', e.target.value)}
                     placeholder="e.g., /about or https://example.com"
-                    className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                    className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
 

@@ -146,7 +146,7 @@ export const HomeEditor: React.FC<HomeEditorProps> = ({ initialData }) => {
               value={data.pageTitle || ''}
               onChange={(e) => setData({ ...data, pageTitle: e.target.value })}
               placeholder="Enter page title"
-              className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
@@ -157,7 +157,7 @@ export const HomeEditor: React.FC<HomeEditorProps> = ({ initialData }) => {
               onChange={(e) => setData({ ...data, pageSubtitle: e.target.value })}
               placeholder="Enter page subtitle"
               rows={2}
-              className="w-full resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
         </div>
@@ -241,7 +241,7 @@ export const HomeEditor: React.FC<HomeEditorProps> = ({ initialData }) => {
                 <Input
                   value={data.banner.banners[editingBannerId].title}
                   onChange={(e) => updateBanner(editingBannerId, 'title', e.target.value)}
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -255,7 +255,7 @@ export const HomeEditor: React.FC<HomeEditorProps> = ({ initialData }) => {
                       handleBannerImageUpload(editingBannerId, e.target.files[0]);
                     }
                   }}
-                  className="w-full p-2 border border-border rounded transition-all duration-200 hover:border-primary/50"
+                  className="w-4/5 p-2 border border-border rounded transition-all duration-200 hover:border-primary/50"
                 />
                 {data.banner.banners[editingBannerId].image && (
                   <img
@@ -423,7 +423,7 @@ export const HomeEditor: React.FC<HomeEditorProps> = ({ initialData }) => {
                 <Input
                   value={data.achievements.items[editingAchievementId].title}
                   onChange={(e) => updateAchievement(editingAchievementId, 'title', e.target.value)}
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -434,7 +434,7 @@ export const HomeEditor: React.FC<HomeEditorProps> = ({ initialData }) => {
                   onChange={(e) => updateAchievement(editingAchievementId, 'description', e.target.value)}
                   placeholder="Achievement description"
                   rows={2}
-                  className="w-full resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -444,7 +444,7 @@ export const HomeEditor: React.FC<HomeEditorProps> = ({ initialData }) => {
                   value={data.achievements.items[editingAchievementId].icon}
                   onChange={(e) => updateAchievement(editingAchievementId, 'icon', e.target.value)}
                   maxLength={2}
-                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
