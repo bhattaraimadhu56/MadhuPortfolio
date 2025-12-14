@@ -91,28 +91,28 @@ export const AboutEditor: React.FC<AboutEditorProps> = ({ initialData }) => {
         <h3 className="text-lg font-semibold mb-6 text-foreground">Page Settings</h3>
         
         <div className="space-y-6">
-          <div className="w-4/5 space-y-2">
+          <div className="w-[90%] space-y-2">
             <label className="text-sm font-medium text-foreground">Page Title</label>
             <Input
               value={data.pageTitle || ''}
               onChange={(e) => setData({ ...data, pageTitle: e.target.value })}
               placeholder="Enter page title"
-              className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
-          <div className="w-4/5 space-y-2">
+          <div className="w-[90%] space-y-2">
             <label className="text-sm font-medium text-foreground">Page Subtitle</label>
             <Textarea
               value={data.pageSubtitle || ''}
               onChange={(e) => setData({ ...data, pageSubtitle: e.target.value })}
               placeholder="Enter page subtitle"
               rows={2}
-              className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-[90%] resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
-          <div className="w-4/5 space-y-2">
+          <div className="w-[90%] space-y-2">
             <label className="text-sm font-medium text-foreground">Personal Story</label>
             <Textarea
               value={data.personalStory?.content || ''}
@@ -122,7 +122,7 @@ export const AboutEditor: React.FC<AboutEditorProps> = ({ initialData }) => {
               })}
               placeholder="Enter your personal story"
               rows={4}
-              className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-[90%] resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
         </div>
@@ -193,41 +193,41 @@ export const AboutEditor: React.FC<AboutEditorProps> = ({ initialData }) => {
           <div className="mt-6 p-4 bg-accent/20 rounded-lg border border-accent/50">
             <h4 className="font-semibold mb-4 text-foreground">Edit Experience</h4>
             <div className="space-y-4">
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Position Title</label>
                 <Input
                   value={data.workExperience.items[editingExperienceId].position}
                   onChange={(e) => updateExperience(editingExperienceId, 'position', e.target.value)}
-                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Company Name</label>
                 <Input
                   value={data.workExperience.items[editingExperienceId].company}
                   onChange={(e) => updateExperience(editingExperienceId, 'company', e.target.value)}
-                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Duration</label>
                 <Input
                   value={data.workExperience.items[editingExperienceId].duration}
                   onChange={(e) => updateExperience(editingExperienceId, 'duration', e.target.value)}
                   placeholder="e.g., 2020 - 2024"
-                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Description</label>
                 <Textarea
                   value={data.workExperience.items[editingExperienceId].description}
                   onChange={(e) => updateExperience(editingExperienceId, 'description', e.target.value)}
                   rows={3}
-                  className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -336,40 +336,40 @@ export const AboutEditor: React.FC<AboutEditorProps> = ({ initialData }) => {
           <div className="mt-6 p-4 bg-accent/20 rounded-lg border border-accent/50">
             <h4 className="font-semibold mb-4 text-foreground">Edit Education</h4>
             <div className="space-y-4">
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Degree</label>
                 <Input
                   value={data.education.items[editingEducationId].degree}
                   onChange={(e) => updateEducation(editingEducationId, 'degree', e.target.value)}
-                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Institution</label>
                 <Input
                   value={data.education.items[editingEducationId].school}
                   onChange={(e) => updateEducation(editingEducationId, 'school', e.target.value)}
-                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Year</label>
                 <Input
                   value={data.education.items[editingEducationId].year}
                   onChange={(e) => updateEducation(editingEducationId, 'year', e.target.value)}
-                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Details</label>
                 <Textarea
                   value={data.education.items[editingEducationId].details}
                   onChange={(e) => updateEducation(editingEducationId, 'details', e.target.value)}
                   rows={2}
-                  className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 

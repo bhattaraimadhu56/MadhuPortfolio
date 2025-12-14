@@ -63,35 +63,35 @@ export const FooterEditor: React.FC<FooterEditorProps> = ({ initialData }) => {
         <h3 className="text-lg font-semibold mb-6 text-foreground">Footer Settings</h3>
         
         <div className="space-y-6">
-          <div className="w-4/5 space-y-2">
+          <div className="w-[90%] space-y-2">
             <label className="text-sm font-medium text-foreground">Copyright Text</label>
             <Input
               value={data.copyright || ''}
               onChange={(e) => setData({ ...data, copyright: e.target.value })}
               placeholder="e.g., © 2024 Your Name. All rights reserved."
-              className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
-          <div className="w-4/5 space-y-2">
+          <div className="w-[90%] space-y-2">
             <label className="text-sm font-medium text-foreground">Footer Description</label>
             <Textarea
               value={data.description || ''}
               onChange={(e) => setData({ ...data, description: e.target.value })}
               placeholder="Enter footer description"
               rows={2}
-              className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-[90%] resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
-          <div className="w-4/5 space-y-2">
+          <div className="w-[90%] space-y-2">
             <label className="text-sm font-medium text-foreground">Social Media Links</label>
             <Textarea
               value={data.socialLinks || ''}
               onChange={(e) => setData({ ...data, socialLinks: e.target.value })}
               placeholder="Enter social media links (one per line)"
               rows={3}
-              className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-[90%] resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
         </div>
@@ -101,12 +101,12 @@ export const FooterEditor: React.FC<FooterEditorProps> = ({ initialData }) => {
       {data.sections?.map((section: any, sectionIndex: number) => (
         <Card key={sectionIndex} className="p-6 border border-border/50 bg-card/50 backdrop-blur-sm">
           <div className="flex justify-between items-center mb-6">
-            <div className="w-4/5 space-y-2">
+            <div className="w-[90%] space-y-2">
               <label className="text-sm font-medium text-foreground">Section Title</label>
               <Input
                 value={section.title}
                 onChange={(e) => updateSectionTitle(sectionIndex, e.target.value)}
-                className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
             <Button
@@ -168,22 +168,22 @@ export const FooterEditor: React.FC<FooterEditorProps> = ({ initialData }) => {
             <div className="mt-6 p-4 bg-accent/20 rounded-lg border border-accent/50">
               <h4 className="font-semibold mb-4 text-foreground">Edit Link</h4>
               <div className="space-y-4">
-                <div className="w-4/5 space-y-2">
+                <div className="w-[90%] space-y-2">
                   <label className="text-sm font-medium text-foreground">Label</label>
                   <Input
                     value={section.links[editingLinkId.link].label}
                     onChange={(e) => updateLink(sectionIndex, editingLinkId.link, 'label', e.target.value)}
-                    className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                    className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
 
-                <div className="w-4/5 space-y-2">
+                <div className="w-[90%] space-y-2">
                   <label className="text-sm font-medium text-foreground">URL/Href</label>
                   <Input
                     value={section.links[editingLinkId.link].href}
                     onChange={(e) => updateLink(sectionIndex, editingLinkId.link, 'href', e.target.value)}
                     placeholder="e.g., /about or https://example.com"
-                    className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                    className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
 

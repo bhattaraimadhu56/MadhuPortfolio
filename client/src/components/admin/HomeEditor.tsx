@@ -140,24 +140,24 @@ export const HomeEditor: React.FC<HomeEditorProps> = ({ initialData }) => {
         <h3 className="text-lg font-semibold mb-6 text-foreground">Page Settings</h3>
         
         <div className="space-y-6">
-          <div className="w-4/5 space-y-2">
+          <div className="w-[90%] space-y-2">
             <label className="text-sm font-medium text-foreground">Page Title</label>
             <Input
               value={data.pageTitle || ''}
               onChange={(e) => setData({ ...data, pageTitle: e.target.value })}
               placeholder="Enter page title"
-              className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
-          <div className="w-4/5 space-y-2">
+          <div className="w-[90%] space-y-2">
             <label className="text-sm font-medium text-foreground">Page Subtitle</label>
             <Textarea
               value={data.pageSubtitle || ''}
               onChange={(e) => setData({ ...data, pageSubtitle: e.target.value })}
               placeholder="Enter page subtitle"
               rows={2}
-              className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-[90%] resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
         </div>
@@ -236,16 +236,16 @@ export const HomeEditor: React.FC<HomeEditorProps> = ({ initialData }) => {
           <div className="mt-6 p-4 bg-accent/20 rounded-lg border border-accent/50">
             <h4 className="font-semibold mb-4 text-foreground">Edit Banner</h4>
             <div className="space-y-4">
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Title</label>
                 <Input
                   value={data.banner.banners[editingBannerId].title}
                   onChange={(e) => updateBanner(editingBannerId, 'title', e.target.value)}
-                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Upload Image</label>
                 <input
                   type="file"
@@ -255,7 +255,7 @@ export const HomeEditor: React.FC<HomeEditorProps> = ({ initialData }) => {
                       handleBannerImageUpload(editingBannerId, e.target.files[0]);
                     }
                   }}
-                  className="w-4/5 p-2 border border-border rounded transition-all duration-200 hover:border-primary/50"
+                  className="w-[90%] p-2 border border-border rounded transition-all duration-200 hover:border-primary/50"
                 />
                 {data.banner.banners[editingBannerId].image && (
                   <img
@@ -329,7 +329,7 @@ export const HomeEditor: React.FC<HomeEditorProps> = ({ initialData }) => {
                 value={skill.name}
                 onChange={(e) => updateSkill(index, 'name', e.target.value)}
                 placeholder="Skill name"
-                className="flex-1 w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                className="flex-1 w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
               <Input
                 value={skill.icon}
@@ -418,33 +418,33 @@ export const HomeEditor: React.FC<HomeEditorProps> = ({ initialData }) => {
           <div className="mt-6 p-4 bg-accent/20 rounded-lg border border-accent/50">
             <h4 className="font-semibold mb-4 text-foreground">Edit Achievement</h4>
             <div className="space-y-4">
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Title</label>
                 <Input
                   value={data.achievements.items[editingAchievementId].title}
                   onChange={(e) => updateAchievement(editingAchievementId, 'title', e.target.value)}
-                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Description</label>
                 <Textarea
                   value={data.achievements.items[editingAchievementId].description}
                   onChange={(e) => updateAchievement(editingAchievementId, 'description', e.target.value)}
                   placeholder="Achievement description"
                   rows={2}
-                  className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Icon</label>
                 <Input
                   value={data.achievements.items[editingAchievementId].icon}
                   onChange={(e) => updateAchievement(editingAchievementId, 'icon', e.target.value)}
                   maxLength={2}
-                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 

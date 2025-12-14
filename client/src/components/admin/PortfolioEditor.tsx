@@ -67,35 +67,35 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
         <h3 className="text-lg font-semibold mb-6 text-foreground">Page Settings</h3>
         
         <div className="space-y-6">
-          <div className="w-4/5 space-y-2">
+          <div className="w-[90%] space-y-2">
             <label className="text-sm font-medium text-foreground">Page Title</label>
             <Input
               value={data.pageTitle || ''}
               onChange={(e) => setData({ ...data, pageTitle: e.target.value })}
               placeholder="Enter page title"
-              className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
-          <div className="w-4/5 space-y-2">
+          <div className="w-[90%] space-y-2">
             <label className="text-sm font-medium text-foreground">Page Subtitle</label>
             <Textarea
               value={data.pageSubtitle || ''}
               onChange={(e) => setData({ ...data, pageSubtitle: e.target.value })}
               placeholder="Enter page subtitle"
               rows={2}
-              className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-[90%] resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
-          <div className="w-4/5 space-y-2">
+          <div className="w-[90%] space-y-2">
             <label className="text-sm font-medium text-foreground">Portfolio Description</label>
             <Textarea
               value={data.description || ''}
               onChange={(e) => setData({ ...data, description: e.target.value })}
               placeholder="Enter portfolio description"
               rows={3}
-              className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-[90%] resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
         </div>
@@ -174,36 +174,36 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
           <div className="mt-6 p-4 bg-accent/20 rounded-lg border border-accent/50">
             <h4 className="font-semibold mb-4 text-foreground">Edit Project</h4>
             <div className="space-y-4">
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Project Title</label>
                 <Input
                   value={data.projects[editingProjectId].title}
                   onChange={(e) => updateProject(editingProjectId, 'title', e.target.value)}
-                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Category</label>
                 <Input
                   value={data.projects[editingProjectId].category}
                   onChange={(e) => updateProject(editingProjectId, 'category', e.target.value)}
                   placeholder="e.g., Web Development, Mobile App"
-                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Description</label>
                 <Textarea
                   value={data.projects[editingProjectId].description}
                   onChange={(e) => updateProject(editingProjectId, 'description', e.target.value)}
                   rows={3}
-                  className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Upload Image</label>
                 <input
                   type="file"
@@ -213,7 +213,7 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
                       handleProjectImageUpload(editingProjectId, e.target.files[0]);
                     }
                   }}
-                  className="w-4/5 p-2 border border-border rounded transition-all duration-200 hover:border-primary/50"
+                  className="w-[90%] p-2 border border-border rounded transition-all duration-200 hover:border-primary/50"
                 />
                 {data.projects[editingProjectId].image && (
                   <img
@@ -224,7 +224,7 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
                 )}
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Tags (comma-separated)</label>
                 <Input
                   value={Array.isArray(data.projects[editingProjectId].tags) 
@@ -232,27 +232,27 @@ export const PortfolioEditor: React.FC<PortfolioEditorProps> = ({ initialData })
                     : ''}
                   onChange={(e) => updateProject(editingProjectId, 'tags', e.target.value.split(',').map(t => t.trim()))}
                   placeholder="e.g., React, TypeScript, Tailwind"
-                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Live URL</label>
                 <Input
                   value={data.projects[editingProjectId].liveUrl}
                   onChange={(e) => updateProject(editingProjectId, 'liveUrl', e.target.value)}
                   placeholder="https://example.com"
-                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">GitHub URL</label>
                 <Input
                   value={data.projects[editingProjectId].githubUrl}
                   onChange={(e) => updateProject(editingProjectId, 'githubUrl', e.target.value)}
                   placeholder="https://github.com/username/repo"
-                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 

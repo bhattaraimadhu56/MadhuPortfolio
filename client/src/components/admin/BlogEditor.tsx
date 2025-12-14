@@ -184,7 +184,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
         </h3>
         
         <div className="space-y-4">
-          <div className="space-y-2 w-4/5">
+          <div className="space-y-2 w-[90%]">
             <Label htmlFor="pageTitle" className="text-sm font-semibold">Page Title</Label>
             <Input
               id="pageTitle"
@@ -194,7 +194,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
             />
           </div>
 
-          <div className="space-y-2 w-4/5">
+          <div className="space-y-2 w-[90%]">
             <Label htmlFor="filterLabel" className="text-sm font-semibold">Filter Label</Label>
             <Input
               id="filterLabel"
@@ -204,7 +204,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
             />
           </div>
 
-          <div className="space-y-2 w-4/5">
+          <div className="space-y-2 w-[90%]">
             <Label htmlFor="pageSubtitle" className="text-sm font-semibold">Page Subtitle</Label>
             <Input
               id="pageSubtitle"
@@ -214,7 +214,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
             />
           </div>
 
-          <div className="space-y-2 w-4/5">
+          <div className="space-y-2 w-[90%]">
             <Label htmlFor="emptyMessage" className="text-sm font-semibold">Empty State Message</Label>
             <Input
               id="emptyMessage"
@@ -224,7 +224,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
             />
           </div>
 
-          <div className="space-y-2 w-4/5">
+          <div className="space-y-2 w-[90%]">
             <Label htmlFor="readMoreLabel" className="text-sm font-semibold">Read More Label</Label>
             <Input
               id="readMoreLabel"
@@ -270,7 +270,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
               <div className="space-y-4">
                 <h5 className="font-semibold text-slate-700 dark:text-slate-300">Basic Information</h5>
                 
-                <div className="space-y-2 w-4/5">
+                <div className="space-y-2 w-[90%]">
                   <Label className="text-sm font-semibold">Title *</Label>
                   <Input
                     type="text"
@@ -281,7 +281,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                   />
                 </div>
 
-                <div className="space-y-2 w-4/5">
+                <div className="space-y-2 w-[90%]">
                   <Label className="text-sm font-semibold">Slug (URL) *</Label>
                   <Input
                     type="text"
@@ -293,7 +293,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                   <p className="text-xs text-muted-foreground">URL: /blog/{newPost.slug}</p>
                 </div>
 
-                <div className="space-y-2 w-4/5">
+                <div className="space-y-2 w-[90%]">
                   <Label className="text-sm font-semibold">Excerpt *</Label>
                   <Textarea
                     value={newPost.excerpt}
@@ -309,7 +309,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
               <div className="space-y-4">
                 <h5 className="font-semibold text-slate-700 dark:text-slate-300">Featured Image</h5>
                 
-                <div className="space-y-2 w-4/5">
+                <div className="space-y-2 w-[90%]">
                   <Label className="text-sm font-semibold">Upload Image from Computer</Label>
                   <div className="flex gap-2">
                     <Input
@@ -342,7 +342,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
               <div className="space-y-4">
                 <h5 className="font-semibold text-slate-700 dark:text-slate-300">Metadata</h5>
                 
-                <div className="space-y-4 w-4/5">
+                <div className="space-y-4 w-[90%]">
                   <div className="space-y-2">
                     <Label className="text-sm font-semibold">Author</Label>
                     <Input
@@ -404,7 +404,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
               {/* Content */}
               <div className="space-y-4">
                 <h5 className="font-semibold text-slate-700 dark:text-slate-300">Content (Markdown) *</h5>
-              <div className="border rounded-lg overflow-hidden shadow-lg w-4/5">
+              <div className="border rounded-lg overflow-hidden shadow-lg w-[90%]">
                 <MdEditor
                   value={newPost.content}
                   style={{ height: '400px' }}
@@ -419,7 +419,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t w-4/5">
+              <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t w-[90%]">
                 <Button
                   type="button"
                   variant="outline"
@@ -589,7 +589,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
             <div className="space-y-4">
               <h5 className="font-semibold text-slate-700 dark:text-slate-300">Basic Information</h5>
               
-              <div className="space-y-2 w-4/5">
+              <div className="space-y-2 w-[90%]">
                 <Label className="text-sm font-semibold">Title *</Label>
                 <Input
                   type="text"
@@ -600,7 +600,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                 />
               </div>
 
-              <div className="space-y-2 w-4/5">
+              <div className="space-y-2 w-[90%]">
                 <Label className="text-sm font-semibold">Slug (URL) *</Label>
                 <Input
                   type="text"
@@ -612,7 +612,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
                 <p className="text-xs text-muted-foreground">URL: /blog/{data.posts[editingIndex].slug}</p>
               </div>
 
-              <div className="space-y-2 w-4/5">
+              <div className="space-y-2 w-[90%]">
                 <Label className="text-sm font-semibold">Excerpt *</Label>
                 <Textarea
                   value={data.posts[editingIndex].excerpt}
@@ -628,7 +628,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
             <div className="space-y-4">
               <h5 className="font-semibold text-slate-700 dark:text-slate-300">Featured Image</h5>
               
-              <div className="space-y-2 w-4/5">
+              <div className="space-y-2 w-[90%]">
                 <Label className="text-sm font-semibold">Upload Image from Computer</Label>
                 <div className="flex gap-2">
                   <Input
@@ -661,7 +661,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
             <div className="space-y-4">
               <h5 className="font-semibold text-slate-700 dark:text-slate-300">Metadata</h5>
               
-              <div className="space-y-4 w-4/5">
+              <div className="space-y-4 w-[90%]">
                 <div className="space-y-2">
                   <Label className="text-sm font-semibold">Author</Label>
                   <Input
@@ -726,7 +726,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
             {/* Content */}
             <div className="space-y-4">
               <h5 className="font-semibold text-slate-700 dark:text-slate-300">Content (Markdown) *</h5>
-              <div className="border rounded-lg overflow-hidden shadow-lg w-4/5">
+              <div className="border rounded-lg overflow-hidden shadow-lg w-[90%]">
                 <MdEditor
                   value={data.posts[editingIndex].content}
                   style={{ height: '400px' }}
@@ -741,7 +741,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ initialData }) => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t w-4/5">
+            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t w-[90%]">
               <Button
                 type="button"
                 variant="outline"

@@ -66,55 +66,55 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
             <h3 className="text-lg font-semibold mb-6 text-foreground">General Settings</h3>
             
             <div className="space-y-6">
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Site Title</label>
               <Input
                 value={data.siteTitle || ''}
                 onChange={(e) => setData({ ...data, siteTitle: e.target.value })}
                 placeholder="Enter site title"
-                className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Site Description</label>
               <Textarea
                 value={data.siteDescription || ''}
                 onChange={(e) => setData({ ...data, siteDescription: e.target.value })}
                 placeholder="Enter site description"
                 rows={3}
-                className="w-4/5 resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                className="w-[90%] resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Author Name</label>
               <Input
                 value={data.authorName || ''}
                 onChange={(e) => setData({ ...data, authorName: e.target.value })}
                 placeholder="Enter author name"
-                className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Author Email</label>
               <Input
                 value={data.authorEmail || ''}
                 onChange={(e) => setData({ ...data, authorEmail: e.target.value })}
                 placeholder="Enter author email"
                 type="email"
-                className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Site URL</label>
               <Input
                 value={data.siteUrl || ''}
                 onChange={(e) => setData({ ...data, siteUrl: e.target.value })}
                 placeholder="e.g., https://example.com"
-                className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
               </div>
             </div>
@@ -127,7 +127,7 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
             <h3 className="text-lg font-semibold mb-6 text-foreground">Header Settings</h3>
             
             <div className="space-y-6">
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Header Title</label>
                 <Input
                   value={data.header?.title || ''}
@@ -136,11 +136,11 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
                     header: { ...data.header, title: e.target.value }
                   })}
                   placeholder="Enter header title"
-                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Header Subtitle</label>
                 <Input
                   value={data.header?.subtitle || ''}
@@ -149,11 +149,11 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
                     header: { ...data.header, subtitle: e.target.value }
                   })}
                   placeholder="Enter header subtitle"
-                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Logo URL</label>
                 <Input
                   value={data.header?.logo || ''}
@@ -162,7 +162,7 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
                     header: { ...data.header, logo: e.target.value }
                   })}
                   placeholder="Enter logo URL"
-                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
             </div>
@@ -231,22 +231,22 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
               <div className="mt-6 p-4 bg-accent/20 rounded-lg border border-accent/50">
                 <h4 className="font-semibold mb-4 text-foreground">Edit Navigation Link</h4>
                 <div className="space-y-4">
-                  <div className="w-4/5 space-y-2">
+                  <div className="w-[90%] space-y-2">
                     <label className="text-sm font-medium text-foreground">Label</label>
                     <Input
                       value={data.header.navigationLinks[editingNavId].label}
                       onChange={(e) => updateNavigationLink(editingNavId, 'label', e.target.value)}
-                      className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                      className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
 
-                  <div className="w-4/5 space-y-2">
+                  <div className="w-[90%] space-y-2">
                     <label className="text-sm font-medium text-foreground">URL/Href</label>
                     <Input
                       value={data.header.navigationLinks[editingNavId].href}
                       onChange={(e) => updateNavigationLink(editingNavId, 'href', e.target.value)}
                       placeholder="e.g., /about or https://example.com"
-                      className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                      className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
 
@@ -295,7 +295,7 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
             <h3 className="text-lg font-semibold mb-6 text-foreground">Theme Settings</h3>
             
             <div className="space-y-6">
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Primary Color</label>
                 <Input
                   value={data.theme?.primaryColor || '#000000'}
@@ -304,11 +304,11 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
                     theme: { ...data.theme, primaryColor: e.target.value }
                   })}
                   type="color"
-                  className="w-4/5 h-10 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] h-10 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Secondary Color</label>
                 <Input
                   value={data.theme?.secondaryColor || '#ffffff'}
@@ -317,11 +317,11 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
                     theme: { ...data.theme, secondaryColor: e.target.value }
                   })}
                   type="color"
-                  className="w-4/5 h-10 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] h-10 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Font Family</label>
                 <Input
                   value={data.theme?.fontFamily || 'Inter'}
@@ -330,11 +330,11 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
                     theme: { ...data.theme, fontFamily: e.target.value }
                   })}
                   placeholder="e.g., Inter, Roboto, Poppins"
-                  className="w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
-              <div className="w-4/5 space-y-2">
+              <div className="w-[90%] space-y-2">
                 <label className="text-sm font-medium text-foreground">Dark Mode</label>
                 <select
                   value={data.theme?.darkMode || 'auto'}
@@ -342,7 +342,7 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
                     ...data,
                     theme: { ...data.theme, darkMode: e.target.value }
                   })}
-                  className="w-4/5 px-3 py-2 border border-border rounded-md bg-background text-foreground transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-[90%] px-3 py-2 border border-border rounded-md bg-background text-foreground transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 >
                   <option value="auto">Auto</option>
                   <option value="light">Light</option>
