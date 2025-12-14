@@ -25,7 +25,7 @@ const plugins = [
 export default defineConfig({
   // Determine base path dynamically: '/' for custom domain, '/MadhuPortfolio/' for GitHub Pages URL
   // This is the definitive fix for the custom domain blank page issue.
-  base: process.env.NODE_ENV === 'production' && process.env.VITE_CUSTOM_DOMAIN === 'true' ? '/' : '/MadhuPortfolio/',
+  base: '/',
   plugins,
   resolve: {
     alias: {
