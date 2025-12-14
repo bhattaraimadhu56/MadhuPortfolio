@@ -36,6 +36,7 @@ export default defineConfig({
   },
   envDir: path.resolve(import.meta.dirname),
   root: path.resolve(import.meta.dirname, "client"),
+  envPrefix: 'VITE_',
   build: {
     outDir: "../dist",
     emptyOutDir: true,
