@@ -16,6 +16,8 @@ import bcrypt from 'bcryptjs';
 const ADMIN_PASSWORD_HASH = import.meta.env.VITE_ADMIN_PASSWORD_HASH || 
   '$2b$10$cqnpofa26gRAGU1sc5APJuLUNv6SkOY.Yke6YYLkaFbsi9ZiWZC2i';
 
+console.log('DEBUG: VITE_ADMIN_PASSWORD_HASH from Vercel:', import.meta.env.VITE_ADMIN_PASSWORD_HASH);
+
 const SECRET_KEY_COMBO = { ctrl: true, shift: true, key: 'e' };
 
 export interface AdminModeState {
