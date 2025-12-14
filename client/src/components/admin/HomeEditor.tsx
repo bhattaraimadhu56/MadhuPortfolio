@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { EditorWrapper } from './EditorWrapper';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Plus, Trash2, GripVertical } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
+import { Plus, Trash2, Eye, Edit2 } from 'lucide-react';
 
 interface HomeEditorProps {
   initialData: any;
@@ -14,30 +11,16 @@ interface HomeEditorProps {
 
 export const HomeEditor: React.FC<HomeEditorProps> = ({ initialData }) => {
   const [data, setData] = useState(initialData);
-  const [hasChanges, setHasChanges] = useState(false);
+  const [editingBannerId, setEditingBannerId] = useState<number | null>(null);
+  const [editingAchievementId, setEditingAchievementId] = useState<number | null>(null);
+  const [viewingBannerId, setViewingBannerId] = useState<number | null>(null);
+  const [viewingAchievementId, setViewingAchievementId] = useState<number | null>(null);
 
   useEffect(() => {
-    setHasChanges(JSON.stringify(data) !== JSON.stringify(initialData));
-  }, [data, initialData]);
+    localStorage.setItem('home_content', JSON.stringify(data));
+  }, [data]);
 
-  const handleReset = () => {
-    setData(initialData);
-  };
-
-  const updateField = (path: string[], value: any) => {
-    setData((prev: any) => {
-      const newData = JSON.parse(JSON.stringify(prev));
-      let current = newData;
-      
-      for (let i = 0; i < path.length - 1; i++) {
-        current = current[path[i]];
-      }
-      
-      current[path[path.length - 1]] = value;
-      return newData;
-    });
-  };
-
+  // ============ BANNER MANAGEMENT ============
   const addBanner = () => {
     setData((prev: any) => ({
       ...prev,
@@ -45,342 +28,466 @@ export const HomeEditor: React.FC<HomeEditorProps> = ({ initialData }) => {
         ...prev.banner,
         banners: [
           ...prev.banner.banners,
-          {
-            image: '/images/banners/new_banner.jpg',
-            title: 'New Banner Title',
-          },
-        ],
-      },
+          { image: '', title: 'New Banner' }
+        ]
+      }
     }));
   };
 
-  const removeBanner = (index: number) => {
+  const deleteBanner = (index: number) => {
     setData((prev: any) => ({
       ...prev,
       banner: {
         ...prev.banner,
-        banners: prev.banner.banners.filter((_: any, i: number) => i !== index),
-      },
+        banners: prev.banner.banners.filter((_: any, i: number) => i !== index)
+      }
     }));
   };
 
-  const addSkill = () => {
-    setData((prev: any) => ({
-      ...prev,
-      skills: [
-        ...prev.skills,
-        { name: 'New Skill', icon: '🎯' },
-      ],
-    }));
+  const updateBanner = (index: number, field: string, value: string) => {
+    setData((prev: any) => {
+      const newData = JSON.parse(JSON.stringify(prev));
+      newData.banner.banners[index][field] = value;
+      return newData;
+    });
   };
 
-  const removeSkill = (index: number) => {
-    setData((prev: any) => ({
-      ...prev,
-      skills: prev.skills.filter((_: any, i: number) => i !== index),
-    }));
+  const handleBannerImageUpload = (index: number, file: File) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      updateBanner(index, 'image', reader.result as string);
+    };
+    reader.readAsDataURL(file);
   };
 
+  // ============ ACHIEVEMENT MANAGEMENT ============
   const addAchievement = () => {
     setData((prev: any) => ({
       ...prev,
-      achievements: [
+      achievements: {
         ...prev.achievements,
-        {
-          icon: 'award',
-          title: 'New Achievement',
-          description: 'Description here',
-        },
-      ],
+        items: [
+          ...prev.achievements.items,
+          { title: 'New Achievement', description: '', icon: '🏆' }
+        ]
+      }
     }));
   };
 
-  const removeAchievement = (index: number) => {
+  const deleteAchievement = (index: number) => {
     setData((prev: any) => ({
       ...prev,
-      achievements: prev.achievements.filter((_: any, i: number) => i !== index),
+      achievements: {
+        ...prev.achievements,
+        items: prev.achievements.items.filter((_: any, i: number) => i !== index)
+      }
     }));
+  };
+
+  const updateAchievement = (index: number, field: string, value: string) => {
+    setData((prev: any) => {
+      const newData = JSON.parse(JSON.stringify(prev));
+      newData.achievements.items[index][field] = value;
+      return newData;
+    });
+  };
+
+  // ============ SKILLS MANAGEMENT ============
+  const addSkill = () => {
+    setData((prev: any) => ({
+      ...prev,
+      skills: {
+        ...prev.skills,
+        items: [...prev.skills.items, { name: 'New Skill', icon: '⭐' }]
+      }
+    }));
+  };
+
+  const deleteSkill = (index: number) => {
+    setData((prev: any) => ({
+      ...prev,
+      skills: {
+        ...prev.skills,
+        items: prev.skills.items.filter((_: any, i: number) => i !== index)
+      }
+    }));
+  };
+
+  const updateSkill = (index: number, field: string, value: string) => {
+    setData((prev: any) => {
+      const newData = JSON.parse(JSON.stringify(prev));
+      newData.skills.items[index][field] = value;
+      return newData;
+    });
+  };
+
+  const saveBanner = () => {
+    setEditingBannerId(null);
+  };
+
+  const saveAchievement = () => {
+    setEditingAchievementId(null);
+  };
+
+  const saveSkill = () => {
+    // Skills are auto-saved
   };
 
   return (
-    <EditorWrapper
-      fileName="home_content.json"
-      data={data}
-      onReset={handleReset}
-      hasChanges={hasChanges}
-    >
-      {/* Banner Settings */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Banner Settings</h3>
+    <div className="w-full space-y-8 pb-8">
+      {/* ============ PAGE SETTINGS ============ */}
+      <Card className="p-6 border border-border/50 bg-card/50 backdrop-blur-sm">
+        <h3 className="text-lg font-semibold mb-6 text-foreground">Page Settings</h3>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="autoScrollInterval">Auto Scroll Interval (ms)</Label>
+        <div className="space-y-6">
+          <div className="w-4/5 space-y-2">
+            <label className="text-sm font-medium text-foreground">Page Title</label>
             <Input
-              id="autoScrollInterval"
-              type="number"
-              value={data.banner.autoScrollInterval}
-              onChange={(e) => updateField(['banner', 'autoScrollInterval'], parseInt(e.target.value))}
+              value={data.pageTitle || ''}
+              onChange={(e) => setData({ ...data, pageTitle: e.target.value })}
+              placeholder="Enter page title"
+              className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="profilePosition">Profile Position</Label>
-            <select
-              id="profilePosition"
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              value={data.banner.profilePosition}
-              onChange={(e) => updateField(['banner', 'profilePosition'], e.target.value)}
-            >
-              <option value="left">Left</option>
-              <option value="right">Right</option>
-            </select>
+
+          <div className="w-4/5 space-y-2">
+            <label className="text-sm font-medium text-foreground">Page Subtitle</label>
+            <Textarea
+              value={data.pageSubtitle || ''}
+              onChange={(e) => setData({ ...data, pageSubtitle: e.target.value })}
+              placeholder="Enter page subtitle"
+              rows={2}
+              className="w-full resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+            />
           </div>
         </div>
+      </Card>
 
-        <Separator />
-
-        {/* Banner Slides */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h4 className="font-semibold">Banner Slides</h4>
-            <Button size="sm" onClick={addBanner}>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Banner
-            </Button>
-          </div>
-
-          {data.banner.banners.map((banner: any, index: number) => (
-            <Card key={index} className="p-4">
-              <div className="flex items-start gap-4">
-                <GripVertical className="h-5 w-5 text-muted-foreground mt-2" />
-                
-                <div className="flex-1 space-y-3">
-                  <div className="space-y-2">
-                    <Label>Image Path</Label>
-                    <Input
-                      value={banner.image}
-                      onChange={(e) => {
-                        const newBanners = [...data.banner.banners];
-                        newBanners[index].image = e.target.value;
-                        updateField(['banner', 'banners'], newBanners);
-                      }}
-                      placeholder="/images/banners/banner.jpg"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Title</Label>
-                    <Input
-                      value={banner.title}
-                      onChange={(e) => {
-                        const newBanners = [...data.banner.banners];
-                        newBanners[index].title = e.target.value;
-                        updateField(['banner', 'banners'], newBanners);
-                      }}
-                    />
-                  </div>
-                </div>
-
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => removeBanner(index)}
-                  className="text-destructive"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </div>
-
-      <Separator className="my-6" />
-
-      {/* Hero Section */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Hero Section</h3>
-        
-        <div className="space-y-2">
-          <Label htmlFor="heroTagline">Tagline</Label>
-          <Input
-            id="heroTagline"
-            value={data.heroTagline}
-            onChange={(e) => updateField(['heroTagline'], e.target.value)}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="heroHeading">Heading</Label>
-          <Input
-            id="heroHeading"
-            value={data.heroHeading}
-            onChange={(e) => updateField(['heroHeading'], e.target.value)}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="heroSubheading">Subheading</Label>
-          <Input
-            id="heroSubheading"
-            value={data.heroSubheading}
-            onChange={(e) => updateField(['heroSubheading'], e.target.value)}
-          />
-        </div>
-      </div>
-
-      <Separator className="my-6" />
-
-      {/* Skills Section */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold">Skills Section</h3>
-          <Button size="sm" onClick={addSkill}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add Skill
+      {/* ============ BANNERS ============ */}
+      <Card className="p-6 border border-border/50 bg-card/50 backdrop-blur-sm">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-lg font-semibold text-foreground">Banners</h3>
+          <Button
+            onClick={addBanner}
+            className="gap-2 bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200"
+          >
+            <Plus size={18} /> Add Banner
           </Button>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="skillsTitle">Section Title</Label>
-          <Input
-            id="skillsTitle"
-            value={data.skillsTitle}
-            onChange={(e) => updateField(['skillsTitle'], e.target.value)}
-          />
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-border/50">
+                <th className="text-left py-3 px-4 font-semibold text-foreground">Title</th>
+                <th className="text-left py-3 px-4 font-semibold text-foreground">Image</th>
+                <th className="text-center py-3 px-4 font-semibold text-foreground">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.banner?.banners?.map((banner: any, index: number) => (
+                <tr key={index} className="border-b border-border/30 hover:bg-accent/30 transition-colors duration-200">
+                  <td className="py-3 px-4">
+                    <span className="text-foreground">{banner.title}</span>
+                  </td>
+                  <td className="py-3 px-4">
+                    {banner.image && (
+                      <img
+                        src={banner.image}
+                        alt={banner.title}
+                        className="h-10 w-16 object-cover rounded"
+                      />
+                    )}
+                  </td>
+                  <td className="py-3 px-4 text-center space-x-2">
+                    <Button
+                      onClick={() => setViewingBannerId(index)}
+                      size="sm"
+                      variant="outline"
+                      className="hover:bg-primary/20 transition-all duration-200"
+                    >
+                      <Eye size={16} />
+                    </Button>
+                    <Button
+                      onClick={() => setEditingBannerId(index)}
+                      size="sm"
+                      variant="outline"
+                      className="hover:bg-primary/20 transition-all duration-200"
+                    >
+                      <Edit2 size={16} />
+                    </Button>
+                    <Button
+                      onClick={() => deleteBanner(index)}
+                      size="sm"
+                      variant="destructive"
+                      className="hover:bg-destructive/90 transition-all duration-200"
+                    >
+                      <Trash2 size={16} />
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="skillsSubtitle">Section Subtitle</Label>
-          <Input
-            id="skillsSubtitle"
-            value={data.skillsSubtitle}
-            onChange={(e) => updateField(['skillsSubtitle'], e.target.value)}
-          />
-        </div>
+        {/* Edit Banner Form */}
+        {editingBannerId !== null && (
+          <div className="mt-6 p-4 bg-accent/20 rounded-lg border border-accent/50">
+            <h4 className="font-semibold mb-4 text-foreground">Edit Banner</h4>
+            <div className="space-y-4">
+              <div className="w-4/5 space-y-2">
+                <label className="text-sm font-medium text-foreground">Title</label>
+                <Input
+                  value={data.banner.banners[editingBannerId].title}
+                  onChange={(e) => updateBanner(editingBannerId, 'title', e.target.value)}
+                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+              </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {data.skills.map((skill: any, index: number) => (
-            <Card key={index} className="p-3">
-              <div className="flex items-center gap-3">
-                <Input
-                  value={skill.icon}
+              <div className="w-4/5 space-y-2">
+                <label className="text-sm font-medium text-foreground">Upload Image</label>
+                <input
+                  type="file"
+                  accept="image/*"
                   onChange={(e) => {
-                    const newSkills = [...data.skills];
-                    newSkills[index].icon = e.target.value;
-                    updateField(['skills'], newSkills);
+                    if (e.target.files?.[0]) {
+                      handleBannerImageUpload(editingBannerId, e.target.files[0]);
+                    }
                   }}
-                  className="w-16 text-center"
-                  placeholder="🎯"
+                  className="w-full p-2 border border-border rounded transition-all duration-200 hover:border-primary/50"
                 />
-                <Input
-                  value={skill.name}
-                  onChange={(e) => {
-                    const newSkills = [...data.skills];
-                    newSkills[index].name = e.target.value;
-                    updateField(['skills'], newSkills);
-                  }}
-                  className="flex-1"
-                />
+                {data.banner.banners[editingBannerId].image && (
+                  <img
+                    src={data.banner.banners[editingBannerId].image}
+                    alt="Preview"
+                    className="h-32 w-full object-cover rounded mt-2"
+                  />
+                )}
+              </div>
+
+              <div className="flex gap-2 pt-4">
                 <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => removeSkill(index)}
-                  className="text-destructive"
+                  onClick={saveBanner}
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200"
                 >
-                  <Trash2 className="h-4 w-4" />
+                  Save Banner
+                </Button>
+                <Button
+                  onClick={() => setEditingBannerId(null)}
+                  variant="outline"
+                  className="hover:bg-accent/50 transition-all duration-200"
+                >
+                  Cancel
                 </Button>
               </div>
-            </Card>
-          ))}
-        </div>
-      </div>
+            </div>
+          </div>
+        )}
 
-      <Separator className="my-6" />
-
-      {/* Achievements Section */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold">Achievements Section</h3>
-          <Button size="sm" onClick={addAchievement}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add Achievement
-          </Button>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="achievementsTitle">Section Title</Label>
-          <Input
-            id="achievementsTitle"
-            value={data.achievementsTitle}
-            onChange={(e) => updateField(['achievementsTitle'], e.target.value)}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="achievementsSubtitle">Section Subtitle</Label>
-          <Input
-            id="achievementsSubtitle"
-            value={data.achievementsSubtitle}
-            onChange={(e) => updateField(['achievementsSubtitle'], e.target.value)}
-          />
-        </div>
-
-        {data.achievements.map((achievement: any, index: number) => (
-          <Card key={index} className="p-4">
-            <div className="flex items-start gap-4">
-              <div className="flex-1 space-y-3">
-                <div className="space-y-2">
-                  <Label>Icon</Label>
-                  <Input
-                    value={achievement.icon}
-                    onChange={(e) => {
-                      const newAchievements = [...data.achievements];
-                      newAchievements[index].icon = e.target.value;
-                      updateField(['achievements'], newAchievements);
-                    }}
-                    placeholder="award"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label>Title</Label>
-                  <Input
-                    value={achievement.title}
-                    onChange={(e) => {
-                      const newAchievements = [...data.achievements];
-                      newAchievements[index].title = e.target.value;
-                      updateField(['achievements'], newAchievements);
-                    }}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Description</Label>
-                  <Input
-                    value={achievement.description}
-                    onChange={(e) => {
-                      const newAchievements = [...data.achievements];
-                      newAchievements[index].description = e.target.value;
-                      updateField(['achievements'], newAchievements);
-                    }}
-                  />
-                </div>
-              </div>
-
+        {/* View Banner */}
+        {viewingBannerId !== null && (
+          <div className="mt-6 p-4 bg-accent/20 rounded-lg border border-accent/50">
+            <h4 className="font-semibold mb-4 text-foreground">View Banner</h4>
+            <div className="space-y-2">
+              <p className="text-foreground"><strong>Title:</strong> {data.banner.banners[viewingBannerId].title}</p>
+              {data.banner.banners[viewingBannerId].image && (
+                <img
+                  src={data.banner.banners[viewingBannerId].image}
+                  alt={data.banner.banners[viewingBannerId].title}
+                  className="h-48 w-full object-cover rounded"
+                />
+              )}
               <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => removeAchievement(index)}
-                className="text-destructive"
+                onClick={() => setViewingBannerId(null)}
+                variant="outline"
+                className="mt-4 hover:bg-accent/50 transition-all duration-200"
               >
-                <Trash2 className="h-4 w-4" />
+                Close
               </Button>
             </div>
-          </Card>
-        ))}
-      </div>
-    </EditorWrapper>
+          </div>
+        )}
+      </Card>
+
+      {/* ============ SKILLS ============ */}
+      <Card className="p-6 border border-border/50 bg-card/50 backdrop-blur-sm">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-lg font-semibold text-foreground">Skills</h3>
+          <Button
+            onClick={addSkill}
+            className="gap-2 bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200"
+          >
+            <Plus size={18} /> Add Skill
+          </Button>
+        </div>
+
+        <div className="space-y-3">
+          {data.skills?.items?.map((skill: any, index: number) => (
+            <div key={index} className="flex items-center gap-3 p-3 bg-accent/20 rounded-lg border border-accent/50 hover:border-primary/50 transition-all duration-200 group">
+              <Input
+                value={skill.name}
+                onChange={(e) => updateSkill(index, 'name', e.target.value)}
+                placeholder="Skill name"
+                className="flex-1 w-4/5 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              />
+              <Input
+                value={skill.icon}
+                onChange={(e) => updateSkill(index, 'icon', e.target.value)}
+                placeholder="Icon"
+                maxLength={2}
+                className="w-12 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              />
+              <Button
+                onClick={() => deleteSkill(index)}
+                size="sm"
+                variant="destructive"
+                className="opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-destructive/90"
+              >
+                <Trash2 size={16} />
+              </Button>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      {/* ============ ACHIEVEMENTS ============ */}
+      <Card className="p-6 border border-border/50 bg-card/50 backdrop-blur-sm">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-lg font-semibold text-foreground">Achievements</h3>
+          <Button
+            onClick={addAchievement}
+            className="gap-2 bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200"
+          >
+            <Plus size={18} /> Add Achievement
+          </Button>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-border/50">
+                <th className="text-left py-3 px-4 font-semibold text-foreground">Title</th>
+                <th className="text-left py-3 px-4 font-semibold text-foreground">Icon</th>
+                <th className="text-center py-3 px-4 font-semibold text-foreground">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.achievements?.items?.map((achievement: any, index: number) => (
+                <tr key={index} className="border-b border-border/30 hover:bg-accent/30 transition-colors duration-200">
+                  <td className="py-3 px-4">
+                    <span className="text-foreground">{achievement.title}</span>
+                  </td>
+                  <td className="py-3 px-4">
+                    <span className="text-2xl">{achievement.icon}</span>
+                  </td>
+                  <td className="py-3 px-4 text-center space-x-2">
+                    <Button
+                      onClick={() => setViewingAchievementId(index)}
+                      size="sm"
+                      variant="outline"
+                      className="hover:bg-primary/20 transition-all duration-200"
+                    >
+                      <Eye size={16} />
+                    </Button>
+                    <Button
+                      onClick={() => setEditingAchievementId(index)}
+                      size="sm"
+                      variant="outline"
+                      className="hover:bg-primary/20 transition-all duration-200"
+                    >
+                      <Edit2 size={16} />
+                    </Button>
+                    <Button
+                      onClick={() => deleteAchievement(index)}
+                      size="sm"
+                      variant="destructive"
+                      className="hover:bg-destructive/90 transition-all duration-200"
+                    >
+                      <Trash2 size={16} />
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Edit Achievement Form */}
+        {editingAchievementId !== null && (
+          <div className="mt-6 p-4 bg-accent/20 rounded-lg border border-accent/50">
+            <h4 className="font-semibold mb-4 text-foreground">Edit Achievement</h4>
+            <div className="space-y-4">
+              <div className="w-4/5 space-y-2">
+                <label className="text-sm font-medium text-foreground">Title</label>
+                <Input
+                  value={data.achievements.items[editingAchievementId].title}
+                  onChange={(e) => updateAchievement(editingAchievementId, 'title', e.target.value)}
+                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+              </div>
+
+              <div className="w-4/5 space-y-2">
+                <label className="text-sm font-medium text-foreground">Description</label>
+                <Textarea
+                  value={data.achievements.items[editingAchievementId].description}
+                  onChange={(e) => updateAchievement(editingAchievementId, 'description', e.target.value)}
+                  placeholder="Achievement description"
+                  rows={2}
+                  className="w-full resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+              </div>
+
+              <div className="w-4/5 space-y-2">
+                <label className="text-sm font-medium text-foreground">Icon</label>
+                <Input
+                  value={data.achievements.items[editingAchievementId].icon}
+                  onChange={(e) => updateAchievement(editingAchievementId, 'icon', e.target.value)}
+                  maxLength={2}
+                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+              </div>
+
+              <div className="flex gap-2 pt-4">
+                <Button
+                  onClick={saveAchievement}
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200"
+                >
+                  Save Achievement
+                </Button>
+                <Button
+                  onClick={() => setEditingAchievementId(null)}
+                  variant="outline"
+                  className="hover:bg-accent/50 transition-all duration-200"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* View Achievement */}
+        {viewingAchievementId !== null && (
+          <div className="mt-6 p-4 bg-accent/20 rounded-lg border border-accent/50">
+            <h4 className="font-semibold mb-4 text-foreground">View Achievement</h4>
+            <div className="space-y-2">
+              <p className="text-foreground"><strong>Title:</strong> {data.achievements.items[viewingAchievementId].title}</p>
+              <p className="text-foreground"><strong>Description:</strong> {data.achievements.items[viewingAchievementId].description}</p>
+              <p className="text-2xl"><strong>Icon:</strong> {data.achievements.items[viewingAchievementId].icon}</p>
+              <Button
+                onClick={() => setViewingAchievementId(null)}
+                variant="outline"
+                className="mt-4 hover:bg-accent/50 transition-all duration-200"
+              >
+                Close
+              </Button>
+            </div>
+          </div>
+        )}
+      </Card>
+    </div>
   );
 };
+
+export default HomeEditor;

@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { EditorWrapper } from './EditorWrapper';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Plus, Trash2 } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
+import { Plus, Trash2, Eye, Edit2 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface GlobalSettingsEditorProps {
@@ -15,30 +12,14 @@ interface GlobalSettingsEditorProps {
 
 export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ initialData }) => {
   const [data, setData] = useState(initialData);
-  const [hasChanges, setHasChanges] = useState(false);
+  const [editingNavId, setEditingNavId] = useState<number | null>(null);
+  const [viewingNavId, setViewingNavId] = useState<number | null>(null);
 
   useEffect(() => {
-    setHasChanges(JSON.stringify(data) !== JSON.stringify(initialData));
-  }, [data, initialData]);
+    localStorage.setItem('global_settings', JSON.stringify(data));
+  }, [data]);
 
-  const handleReset = () => {
-    setData(initialData);
-  };
-
-  const updateField = (path: string[], value: any) => {
-    setData((prev: any) => {
-      const newData = JSON.parse(JSON.stringify(prev));
-      let current = newData;
-      
-      for (let i = 0; i < path.length - 1; i++) {
-        current = current[path[i]];
-      }
-      
-      current[path[path.length - 1]] = value;
-      return newData;
-    });
-  };
-
+  // ============ NAVIGATION MANAGEMENT ============
   const addNavigationLink = () => {
     setData((prev: any) => ({
       ...prev,
@@ -46,448 +27,334 @@ export const GlobalSettingsEditor: React.FC<GlobalSettingsEditorProps> = ({ init
         ...prev.header,
         navigationLinks: [
           ...prev.header.navigationLinks,
-          { label: 'New Page', href: '/new-page' },
-        ],
-      },
+          { label: 'New Page', href: '/new-page' }
+        ]
+      }
     }));
   };
 
-  const removeNavigationLink = (index: number) => {
+  const deleteNavigationLink = (index: number) => {
     setData((prev: any) => ({
       ...prev,
       header: {
         ...prev.header,
-        navigationLinks: prev.header.navigationLinks.filter((_: any, i: number) => i !== index),
-      },
+        navigationLinks: prev.header.navigationLinks.filter((_: any, i: number) => i !== index)
+      }
     }));
   };
 
-  const addSocialLink = () => {
-    setData((prev: any) => ({
-      ...prev,
-      socialLinks: [
-        ...prev.socialLinks,
-        { icon: 'link', href: 'https://example.com', label: 'New Link' },
-      ],
-    }));
-  };
-
-  const removeSocialLink = (index: number) => {
-    setData((prev: any) => ({
-      ...prev,
-      socialLinks: prev.socialLinks.filter((_: any, i: number) => i !== index),
-    }));
+  const updateNavigationLink = (index: number, field: string, value: string) => {
+    setData((prev: any) => {
+      const newData = JSON.parse(JSON.stringify(prev));
+      newData.header.navigationLinks[index][field] = value;
+      return newData;
+    });
   };
 
   return (
-    <EditorWrapper
-      fileName="global_settings.json"
-      data={data}
-      onReset={handleReset}
-      hasChanges={hasChanges}
-    >
-      <Tabs defaultValue="metadata" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="metadata">Metadata</TabsTrigger>
-          <TabsTrigger value="branding">Branding</TabsTrigger>
-          <TabsTrigger value="header">Header</TabsTrigger>
-          <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="social">Social</TabsTrigger>
+    <div className="w-full space-y-8 pb-8">
+      <Tabs defaultValue="general" className="w-full">
+        <TabsList className="grid w-full grid-cols-3 bg-accent/20 border border-border/50">
+          <TabsTrigger value="general" className="transition-all duration-200 hover:bg-accent/50">General</TabsTrigger>
+          <TabsTrigger value="header" className="transition-all duration-200 hover:bg-accent/50">Header</TabsTrigger>
+          <TabsTrigger value="theme" className="transition-all duration-200 hover:bg-accent/50">Theme</TabsTrigger>
         </TabsList>
 
-        {/* Metadata Tab */}
-        <TabsContent value="metadata" className="space-y-4">
-          <h3 className="text-lg font-semibold">Site Metadata</h3>
-          
-          <div className="space-y-2">
-            <Label htmlFor="siteTitle">Site Title</Label>
-            <Input
-              id="siteTitle"
-              value={data.metadata.siteTitle}
-              onChange={(e) => updateField(['metadata', 'siteTitle'], e.target.value)}
-            />
-          </div>
+        {/* ============ GENERAL SETTINGS ============ */}
+        <TabsContent value="general" className="space-y-6 mt-6">
+          <Card className="p-6 border border-border/50 bg-card/50 backdrop-blur-sm">
+            <h3 className="text-lg font-semibold mb-6 text-foreground">General Settings</h3>
+            
+            <div className="space-y-6">
+              <div className="w-4/5 space-y-2">
+                <label className="text-sm font-medium text-foreground">Site Title</label>
+                <Input
+                  value={data.siteTitle || ''}
+                  onChange={(e) => setData({ ...data, siteTitle: e.target.value })}
+                  placeholder="Enter site title"
+                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+              </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="siteDescription">Site Description</Label>
-            <Textarea
-              id="siteDescription"
-              value={data.metadata.siteDescription}
-              onChange={(e) => updateField(['metadata', 'siteDescription'], e.target.value)}
-              rows={6}
-            />
-          </div>
+              <div className="w-4/5 space-y-2">
+                <label className="text-sm font-medium text-foreground">Site Description</label>
+                <Textarea
+                  value={data.siteDescription || ''}
+                  onChange={(e) => setData({ ...data, siteDescription: e.target.value })}
+                  placeholder="Enter site description"
+                  rows={3}
+                  className="w-full resize-y transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+              </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="siteUrl">Site URL</Label>
-            <Input
-              id="siteUrl"
-              value={data.metadata.siteUrl}
-              onChange={(e) => updateField(['metadata', 'siteUrl'], e.target.value)}
-              placeholder="https://example.com"
-            />
-          </div>
+              <div className="w-4/5 space-y-2">
+                <label className="text-sm font-medium text-foreground">Author Name</label>
+                <Input
+                  value={data.authorName || ''}
+                  onChange={(e) => setData({ ...data, authorName: e.target.value })}
+                  placeholder="Enter author name"
+                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+              </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="faviconPath">Favicon Path</Label>
-              <Input
-                id="faviconPath"
-                value={data.metadata.faviconPath}
-                onChange={(e) => updateField(['metadata', 'faviconPath'], e.target.value)}
-                placeholder="/images/favicon.png"
-              />
+              <div className="w-4/5 space-y-2">
+                <label className="text-sm font-medium text-foreground">Author Email</label>
+                <Input
+                  value={data.authorEmail || ''}
+                  onChange={(e) => setData({ ...data, authorEmail: e.target.value })}
+                  placeholder="Enter author email"
+                  type="email"
+                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+              </div>
+
+              <div className="w-4/5 space-y-2">
+                <label className="text-sm font-medium text-foreground">Site URL</label>
+                <Input
+                  value={data.siteUrl || ''}
+                  onChange={(e) => setData({ ...data, siteUrl: e.target.value })}
+                  placeholder="e.g., https://example.com"
+                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+              </div>
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="appleTouchIconPath">Apple Touch Icon Path</Label>
-              <Input
-                id="appleTouchIconPath"
-                value={data.metadata.appleTouchIconPath}
-                onChange={(e) => updateField(['metadata', 'appleTouchIconPath'], e.target.value)}
-                placeholder="/images/apple-touch-icon.png"
-              />
-            </div>
-          </div>
+          </Card>
         </TabsContent>
 
-        {/* Branding Tab */}
-        <TabsContent value="branding" className="space-y-4">
-          <h3 className="text-lg font-semibold">Brand Colors & Fonts</h3>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="primaryColor">Primary Color</Label>
-              <div className="flex gap-2">
+        {/* ============ HEADER SETTINGS ============ */}
+        <TabsContent value="header" className="space-y-6 mt-6">
+          <Card className="p-6 border border-border/50 bg-card/50 backdrop-blur-sm">
+            <h3 className="text-lg font-semibold mb-6 text-foreground">Header Settings</h3>
+            
+            <div className="space-y-6">
+              <div className="w-4/5 space-y-2">
+                <label className="text-sm font-medium text-foreground">Header Title</label>
                 <Input
-                  id="primaryColor"
-                  type="color"
-                  value={data.branding.primaryColor}
-                  onChange={(e) => updateField(['branding', 'primaryColor'], e.target.value)}
-                  className="w-16 h-10 p-1"
+                  value={data.header?.title || ''}
+                  onChange={(e) => setData({
+                    ...data,
+                    header: { ...data.header, title: e.target.value }
+                  })}
+                  placeholder="Enter header title"
+                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
+              </div>
+
+              <div className="w-4/5 space-y-2">
+                <label className="text-sm font-medium text-foreground">Header Subtitle</label>
                 <Input
-                  value={data.branding.primaryColor}
-                  onChange={(e) => updateField(['branding', 'primaryColor'], e.target.value)}
-                  className="flex-1"
+                  value={data.header?.subtitle || ''}
+                  onChange={(e) => setData({
+                    ...data,
+                    header: { ...data.header, subtitle: e.target.value }
+                  })}
+                  placeholder="Enter header subtitle"
+                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+              </div>
+
+              <div className="w-4/5 space-y-2">
+                <label className="text-sm font-medium text-foreground">Logo URL</label>
+                <Input
+                  value={data.header?.logo || ''}
+                  onChange={(e) => setData({
+                    ...data,
+                    header: { ...data.header, logo: e.target.value }
+                  })}
+                  placeholder="Enter logo URL"
+                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
             </div>
+          </Card>
 
-            <div className="space-y-2">
-              <Label htmlFor="secondaryColor">Secondary Color</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="secondaryColor"
-                  type="color"
-                  value={data.branding.secondaryColor}
-                  onChange={(e) => updateField(['branding', 'secondaryColor'], e.target.value)}
-                  className="w-16 h-10 p-1"
-                />
-                <Input
-                  value={data.branding.secondaryColor}
-                  onChange={(e) => updateField(['branding', 'secondaryColor'], e.target.value)}
-                  className="flex-1"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="accentColor">Accent Color</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="accentColor"
-                  type="color"
-                  value={data.branding.accentColor}
-                  onChange={(e) => updateField(['branding', 'accentColor'], e.target.value)}
-                  className="w-16 h-10 p-1"
-                />
-                <Input
-                  value={data.branding.accentColor}
-                  onChange={(e) => updateField(['branding', 'accentColor'], e.target.value)}
-                  className="flex-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <Separator />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="fontFamily">Body Font Family</Label>
-              <Input
-                id="fontFamily"
-                value={data.branding.fontFamily}
-                onChange={(e) => updateField(['branding', 'fontFamily'], e.target.value)}
-                placeholder="Inter, sans-serif"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="headingFontFamily">Heading Font Family</Label>
-              <Input
-                id="headingFontFamily"
-                value={data.branding.headingFontFamily}
-                onChange={(e) => updateField(['branding', 'headingFontFamily'], e.target.value)}
-                placeholder="Space Grotesk, sans-serif"
-              />
-            </div>
-          </div>
-        </TabsContent>
-
-        {/* Header Tab */}
-        <TabsContent value="header" className="space-y-4">
-          <h3 className="text-lg font-semibold">Header Settings</h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="appName">App Name</Label>
-              <Input
-                id="appName"
-                value={data.header.appName}
-                onChange={(e) => updateField(['header', 'appName'], e.target.value)}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="appLogo">App Logo Path</Label>
-              <Input
-                id="appLogo"
-                value={data.header.appLogo}
-                onChange={(e) => updateField(['header', 'appLogo'], e.target.value)}
-                placeholder="/images/logo.png"
-              />
-            </div>
-          </div>
-
-          <Separator />
-
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h4 className="font-semibold">Navigation Links</h4>
-              <Button size="sm" onClick={addNavigationLink}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Link
+          {/* ============ NAVIGATION LINKS ============ */}
+          <Card className="p-6 border border-border/50 bg-card/50 backdrop-blur-sm">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-lg font-semibold text-foreground">Navigation Links</h3>
+              <Button
+                onClick={addNavigationLink}
+                className="gap-2 bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200"
+              >
+                <Plus size={18} /> Add Link
               </Button>
             </div>
 
-            {data.header.navigationLinks.map((link: any, index: number) => (
-              <Card key={index} className="p-3">
-                <div className="flex items-center gap-3">
-                  <div className="flex-1 grid grid-cols-2 gap-3">
-                    <div className="space-y-2">
-                      <Label>Label</Label>
-                      <Input
-                        value={link.label}
-                        onChange={(e) => {
-                          const newLinks = [...data.header.navigationLinks];
-                          newLinks[index].label = e.target.value;
-                          updateField(['header', 'navigationLinks'], newLinks);
-                        }}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>URL</Label>
-                      <Input
-                        value={link.href}
-                        onChange={(e) => {
-                          const newLinks = [...data.header.navigationLinks];
-                          newLinks[index].href = e.target.value;
-                          updateField(['header', 'navigationLinks'], newLinks);
-                        }}
-                      />
-                    </div>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-border/50">
+                    <th className="text-left py-3 px-4 font-semibold text-foreground">Label</th>
+                    <th className="text-left py-3 px-4 font-semibold text-foreground">URL/Href</th>
+                    <th className="text-center py-3 px-4 font-semibold text-foreground">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.header?.navigationLinks?.map((link: any, index: number) => (
+                    <tr key={index} className="border-b border-border/30 hover:bg-accent/30 transition-colors duration-200">
+                      <td className="py-3 px-4 text-foreground">{link.label}</td>
+                      <td className="py-3 px-4 text-foreground truncate">{link.href}</td>
+                      <td className="py-3 px-4 text-center space-x-2">
+                        <Button
+                          onClick={() => setViewingNavId(index)}
+                          size="sm"
+                          variant="outline"
+                          className="hover:bg-primary/20 transition-all duration-200"
+                        >
+                          <Eye size={16} />
+                        </Button>
+                        <Button
+                          onClick={() => setEditingNavId(index)}
+                          size="sm"
+                          variant="outline"
+                          className="hover:bg-primary/20 transition-all duration-200"
+                        >
+                          <Edit2 size={16} />
+                        </Button>
+                        <Button
+                          onClick={() => deleteNavigationLink(index)}
+                          size="sm"
+                          variant="destructive"
+                          className="hover:bg-destructive/90 transition-all duration-200"
+                        >
+                          <Trash2 size={16} />
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Edit Navigation Link Form */}
+            {editingNavId !== null && (
+              <div className="mt-6 p-4 bg-accent/20 rounded-lg border border-accent/50">
+                <h4 className="font-semibold mb-4 text-foreground">Edit Navigation Link</h4>
+                <div className="space-y-4">
+                  <div className="w-4/5 space-y-2">
+                    <label className="text-sm font-medium text-foreground">Label</label>
+                    <Input
+                      value={data.header.navigationLinks[editingNavId].label}
+                      onChange={(e) => updateNavigationLink(editingNavId, 'label', e.target.value)}
+                      className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                    />
                   </div>
+
+                  <div className="w-4/5 space-y-2">
+                    <label className="text-sm font-medium text-foreground">URL/Href</label>
+                    <Input
+                      value={data.header.navigationLinks[editingNavId].href}
+                      onChange={(e) => updateNavigationLink(editingNavId, 'href', e.target.value)}
+                      placeholder="e.g., /about or https://example.com"
+                      className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                    />
+                  </div>
+
+                  <div className="flex gap-2 pt-4">
+                    <Button
+                      onClick={() => setEditingNavId(null)}
+                      className="bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200"
+                    >
+                      Save Link
+                    </Button>
+                    <Button
+                      onClick={() => setEditingNavId(null)}
+                      variant="outline"
+                      className="hover:bg-accent/50 transition-all duration-200"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* View Navigation Link */}
+            {viewingNavId !== null && (
+              <div className="mt-6 p-4 bg-accent/20 rounded-lg border border-accent/50">
+                <h4 className="font-semibold mb-4 text-foreground">View Navigation Link</h4>
+                <div className="space-y-2">
+                  <p className="text-foreground"><strong>Label:</strong> {data.header.navigationLinks[viewingNavId].label}</p>
+                  <p className="text-foreground"><strong>URL:</strong> {data.header.navigationLinks[viewingNavId].href}</p>
                   <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => removeNavigationLink(index)}
-                    className="text-destructive"
+                    onClick={() => setViewingNavId(null)}
+                    variant="outline"
+                    className="mt-4 hover:bg-accent/50 transition-all duration-200"
                   >
-                    <Trash2 className="h-4 w-4" />
+                    Close
                   </Button>
                 </div>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-
-        {/* Profile Tab */}
-        <TabsContent value="profile" className="space-y-4">
-          <h3 className="text-lg font-semibold">Profile Information</h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="fullName">Full Name</Label>
-              <Input
-                id="fullName"
-                value={data.profile.fullName}
-                onChange={(e) => updateField(['profile', 'fullName'], e.target.value)}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="title">Title</Label>
-              <Input
-                id="title"
-                value={data.profile.title}
-                onChange={(e) => updateField(['profile', 'title'], e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="location">Location</Label>
-              <Input
-                id="location"
-                value={data.profile.location}
-                onChange={(e) => updateField(['profile', 'location'], e.target.value)}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="profileImage">Profile Image Path</Label>
-              <Input
-                id="profileImage"
-                value={data.profile.profileImage}
-                onChange={(e) => updateField(['profile', 'profileImage'], e.target.value)}
-                placeholder="/images/profile.jpg"
-              />
-            </div>
-          </div>
-
-          <Separator />
-
-          <h4 className="font-semibold">Contact Information</h4>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="primaryEmail">Primary Email</Label>
-              <Input
-                id="primaryEmail"
-                type="email"
-                value={data.contact_info.primaryEmail}
-                onChange={(e) => updateField(['contact_info', 'primaryEmail'], e.target.value)}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="secondaryEmail">Secondary Email</Label>
-              <Input
-                id="secondaryEmail"
-                type="email"
-                value={data.contact_info.secondaryEmail}
-                onChange={(e) => updateField(['contact_info', 'secondaryEmail'], e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="phone">Phone</Label>
-              <Input
-                id="phone"
-                value={data.contact_info.phone}
-                onChange={(e) => updateField(['contact_info', 'phone'], e.target.value)}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="resumeFileName">Resume File Path</Label>
-              <Input
-                id="resumeFileName"
-                value={data.contact_info.resumeFileName}
-                onChange={(e) => updateField(['contact_info', 'resumeFileName'], e.target.value)}
-                placeholder="/resume.pdf"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="githubUrl">GitHub URL</Label>
-              <Input
-                id="githubUrl"
-                value={data.contact_info.githubUrl}
-                onChange={(e) => updateField(['contact_info', 'githubUrl'], e.target.value)}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="linkedinUrl">LinkedIn URL</Label>
-              <Input
-                id="linkedinUrl"
-                value={data.contact_info.linkedinUrl}
-                onChange={(e) => updateField(['contact_info', 'linkedinUrl'], e.target.value)}
-              />
-            </div>
-          </div>
-        </TabsContent>
-
-        {/* Social Links Tab */}
-        <TabsContent value="social" className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold">Social Links</h3>
-            <Button size="sm" onClick={addSocialLink}>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Social Link
-            </Button>
-          </div>
-
-          {data.socialLinks.map((link: any, index: number) => (
-            <Card key={index} className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="flex-1 grid grid-cols-3 gap-3">
-                  <div className="space-y-2">
-                    <Label>Icon</Label>
-                    <Input
-                      value={link.icon}
-                      onChange={(e) => {
-                        const newLinks = [...data.socialLinks];
-                        newLinks[index].icon = e.target.value;
-                        updateField(['socialLinks'], newLinks);
-                      }}
-                      placeholder="github"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Label</Label>
-                    <Input
-                      value={link.label}
-                      onChange={(e) => {
-                        const newLinks = [...data.socialLinks];
-                        newLinks[index].label = e.target.value;
-                        updateField(['socialLinks'], newLinks);
-                      }}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>URL</Label>
-                    <Input
-                      value={link.href}
-                      onChange={(e) => {
-                        const newLinks = [...data.socialLinks];
-                        newLinks[index].href = e.target.value;
-                        updateField(['socialLinks'], newLinks);
-                      }}
-                    />
-                  </div>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => removeSocialLink(index)}
-                  className="text-destructive"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
               </div>
-            </Card>
-          ))}
+            )}
+          </Card>
+        </TabsContent>
+
+        {/* ============ THEME SETTINGS ============ */}
+        <TabsContent value="theme" className="space-y-6 mt-6">
+          <Card className="p-6 border border-border/50 bg-card/50 backdrop-blur-sm">
+            <h3 className="text-lg font-semibold mb-6 text-foreground">Theme Settings</h3>
+            
+            <div className="space-y-6">
+              <div className="w-4/5 space-y-2">
+                <label className="text-sm font-medium text-foreground">Primary Color</label>
+                <Input
+                  value={data.theme?.primaryColor || '#000000'}
+                  onChange={(e) => setData({
+                    ...data,
+                    theme: { ...data.theme, primaryColor: e.target.value }
+                  })}
+                  type="color"
+                  className="w-full h-10 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+              </div>
+
+              <div className="w-4/5 space-y-2">
+                <label className="text-sm font-medium text-foreground">Secondary Color</label>
+                <Input
+                  value={data.theme?.secondaryColor || '#ffffff'}
+                  onChange={(e) => setData({
+                    ...data,
+                    theme: { ...data.theme, secondaryColor: e.target.value }
+                  })}
+                  type="color"
+                  className="w-full h-10 transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+              </div>
+
+              <div className="w-4/5 space-y-2">
+                <label className="text-sm font-medium text-foreground">Font Family</label>
+                <Input
+                  value={data.theme?.fontFamily || 'Inter'}
+                  onChange={(e) => setData({
+                    ...data,
+                    theme: { ...data.theme, fontFamily: e.target.value }
+                  })}
+                  placeholder="e.g., Inter, Roboto, Poppins"
+                  className="w-full transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+              </div>
+
+              <div className="w-4/5 space-y-2">
+                <label className="text-sm font-medium text-foreground">Dark Mode</label>
+                <select
+                  value={data.theme?.darkMode || 'auto'}
+                  onChange={(e) => setData({
+                    ...data,
+                    theme: { ...data.theme, darkMode: e.target.value }
+                  })}
+                  className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                >
+                  <option value="auto">Auto</option>
+                  <option value="light">Light</option>
+                  <option value="dark">Dark</option>
+                </select>
+              </div>
+            </div>
+          </Card>
         </TabsContent>
       </Tabs>
-    </EditorWrapper>
+    </div>
   );
 };
+
+export default GlobalSettingsEditor;
